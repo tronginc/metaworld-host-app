@@ -1,0 +1,21 @@
+{
+  "contents": {
+    "page_1": {
+      "title": "Train AI to Earn",
+      "description": "Use your phone's processor to train AI models and earn tokens for your processing power"
+    },
+    "page_2": {
+      "title": "Manage Assets",
+      "description": "Manage and monitor your assets within the Metaworld ecosystem"
+    },
+    "page_3": {
+      "title": "Discover App",
+      "description": "Your gateway to a world of endless possibilities: Pindias, Divega, Metago,..."
+    }
+  },
+  "buttons": {
+    "next": "Next",
+    "previous": "Previous",
+    "discover_now": "Discover Now"
+  }
+}
