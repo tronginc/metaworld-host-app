@@ -1,15 +1,17 @@
 import React, { useMemo, ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import Screen from '@components/UI/Screen';
-import OnboardFlow from '@features/components/OnboardFlow';
+import OnboardFlow from '@features/Onboarding/components/OnboardFlow';
 import train_to_earn from '@assets/images/onboarding/train_to_earn.png';
 import manage_assets from '@assets/images/onboarding/manage_assets.png';
 import discover_app from '@assets/images/onboarding/discover_app.png';
+import { useTheme } from '@react-navigation/native';
 
 type Props = {};
 
 const OnboardingScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('onboarding');
+  const { colors } = useTheme();
 
   const pages = useMemo<ComponentProps<typeof OnboardFlow>['pages']>(() => {
     return [
@@ -32,7 +34,7 @@ const OnboardingScreen: React.FC<Props> = ({}) => {
   }, [t]);
 
   return (
-    <Screen safeAreaEdge="all" backgroundColor="#070C21">
+    <Screen safeAreaEdge="all" backgroundColor={colors.background}>
       <OnboardFlow pages={pages} />
     </Screen>
   );

@@ -22,9 +22,6 @@ const PaginationDots: React.FC<PaginationProps> = ({
   paginationColor,
   paginationSelectedColor,
 }) => {
-  console.log('PaginationComponent.tsx: currentPage: ', currentPage);
-  console.log('PaginationComponent.tsx: totalPages: ', totalPages);
-
   const dots = useMemo(() => {
     return Array.from({ length: totalPages });
   }, [totalPages]);

@@ -1,10 +1,9 @@
 import React, { PropsWithChildren, useMemo } from 'react';
-import { StyleSheet, ViewStyle, ScrollView, Platform } from 'react-native';
+import { StyleSheet, ViewStyle, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = ViewStyle & {
   safeAreaEdge?: keyof typeof safeAreaEdges;
-  enableScroll?: boolean;
 };
 
 const safeAreaEdges = {
@@ -20,35 +19,21 @@ const safeAreaEdges = {
   none: [],
 } as const;
 
-const Screen: React.FC<PropsWithChildren<Props>> = ({
+const Box: React.FC<PropsWithChildren<Props>> = ({
   children,
   safeAreaEdge = 'none',
-
-  enableScroll,
   ...styleProps
 }) => {
   const style = useMemo(() => {
-    return StyleSheet.flatten([styles.screen, styleProps]);
+    return StyleSheet.flatten(styleProps);
   }, [styleProps]);
   const safeAreaEdgesToApply = useMemo(() => {
     return safeAreaEdges[safeAreaEdge];
   }, [safeAreaEdge]);
 
-  if (enableScroll) {
-    return (
-      <SafeAreaView edges={safeAreaEdgesToApply} style={style}>
-        <ScrollView
-          keyboardDismissMode={
-            Platform.OS === 'ios' ? 'interactive' : 'on-drag'
-          }
-          keyboardShouldPersistTaps="always"
-          style={styles.screen}>
-          {children}
-        </ScrollView>
-      </SafeAreaView>
-    );
+  if (safeAreaEdgesToApply.length === 0) {
+    return <View style={style}>{children}</View>;
   }
-
   return (
     <SafeAreaView edges={safeAreaEdgesToApply} style={style}>
       {children}
@@ -56,10 +41,4 @@ const Screen: React.FC<PropsWithChildren<Props>> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-});
-
-export default Screen;
+export default Box;
