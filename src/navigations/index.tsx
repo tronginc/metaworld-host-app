@@ -27,8 +27,12 @@ const switchOptions: NativeStackNavigationOptions = {
 };
 
 const AppNavigator = () => {
-  const { isFirstRun, credentials } = useUserStore();
+  const { isFirstRun, credentials, hydrated } = useUserStore();
   const isLoggedIn = !!credentials;
+
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <NavigationContainer theme={defaultTheme}>

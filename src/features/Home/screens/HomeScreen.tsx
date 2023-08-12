@@ -8,9 +8,41 @@ type Props = {};
 const HomeScreen: React.FC<Props> = ({}) => {
   return (
     <Screen
-      safeAreaEdge="all"
+      safeAreaEdge="top_left_right"
+      backgroundColor={'#fff'}
+      marginBottom={-sizeScale(20)}
+      enableScroll
       paddingHorizontal={sizeScale(17)}
       paddingVertical={sizeScale(8)}>
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
+      <Header title="MetaWorld" />
       <Header title="MetaWorld" />
     </Screen>
   );

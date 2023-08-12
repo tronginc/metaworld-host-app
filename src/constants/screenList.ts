@@ -7,8 +7,11 @@ enum ScreenList {
   AUTH_SET_PASSWORD = 'AUTH_SET_PASSWORD',
 
   MAIN_TABS = 'MAIN_TABS',
-  HOME_SCREEN = 'HOME_SCREEN',
-  ACCOUNT_SCREEN = 'ACCOUNT_SCREEN',
+  HOME = 'HOME',
+  ACCOUNT = 'ACCOUNT',
+  EXPLORE = 'EXPLORE',
+  TICKETS = 'TICKET',
+  SCAN = 'SCAN',
 }
 
 export default ScreenList;
