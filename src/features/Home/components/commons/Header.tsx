@@ -1,5 +1,5 @@
 import Box from '@components/UI/Box';
-import Text from '@components/UI/Text';
+import GradientText from '@components/UI/GradientText';
 import React from 'react';
 
 type Props = {
@@ -9,9 +9,9 @@ type Props = {
 const Header: React.FC<Props> = ({ title }) => {
   return (
     <Box flexDirection="row" justifyContent="space-between">
-      <Text fontSize={24} fontWeight="bold" color="#D42B53">
+      <GradientText fontSize={24} fontWeight="bold">
         {title}
-      </Text>
+      </GradientText>
     </Box>
   );
 };

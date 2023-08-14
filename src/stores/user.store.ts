@@ -38,7 +38,7 @@ const useUserStore = create<UserState>()(
           return await AsyncStorage.removeItem(key);
         },
       },
-      partialize: state => ({ ...state, hydrated: true }),
+      partialize: state => ({ ...state, hydrated: true }), //isFirstRun: true }),
     },
   ),
 );

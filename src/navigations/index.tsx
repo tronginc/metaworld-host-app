@@ -36,7 +36,7 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer theme={defaultTheme}>
-      <RootStack.Navigator>
+      <RootStack.Navigator screenOptions={switchOptions}>
         {isFirstRun ? (
           <RootStack.Screen
             name={ScreenList.ONBOARDING}

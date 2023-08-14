@@ -3,21 +3,23 @@ import { ImageBackground, Pressable, StyleSheet } from 'react-native';
 import tabbar_frame from '@assets/images/icons/tabbar-frame.png';
 import { sizeScale } from '@helpers/scale';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import Text from './Text';
 import { LabelPosition } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import Box from './Box';
+import GradientText from './GradientText';
+
+const TAB_BAR_HEIGHT = 66;
 
 const Tabbar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
-    <Box safeAreaEdge="bottom" position="relative">
+    <Box position="relative">
       <Box
         position="absolute"
         left={0}
         right={0}
         bottom={0}
         zIndex={1}
-        top={sizeScale(66 - 1)}
-        backgroundColor="#04040F"
+        top={sizeScale(TAB_BAR_HEIGHT - 1)}
+        // backgroundColor="#04040F"
       />
       <ImageBackground style={styles.tabbarContainer} source={tabbar_frame}>
         {state.routes.map((route, index) => {
@@ -36,6 +38,7 @@ const Tabbar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               isFocused={state.index === index}
               route={route}
               label={label}
+              tabBarIcon={options.tabBarIcon}
             />
           );
         })}
@@ -53,6 +56,13 @@ type Item = {
         position: LabelPosition;
         children: string;
       }) => React.ReactNode);
+  tabBarIcon?:
+    | ((props: {
+        focused: boolean;
+        color: string;
+        size: number;
+      }) => React.ReactNode)
+    | undefined;
   route: BottomTabBarProps['state']['routes'][number];
   isFocused: boolean;
   navigation: BottomTabBarProps['navigation'];
@@ -62,6 +72,7 @@ const TabbarItem: React.FC<Item> = ({
   isFocused,
   navigation,
   label,
+  tabBarIcon,
 }) => {
   const onLongPress = useCallback(() => {
     navigation.emit({
@@ -87,7 +98,9 @@ const TabbarItem: React.FC<Item> = ({
 
   const content =
     typeof label === 'string' ? (
-      <Text color={isFocused ? '#673ab7' : '#222'}>{label}</Text>
+      <GradientText colors={isFocused ? undefined : ['#49566E', '#49566E']}>
+        {label}
+      </GradientText>
     ) : (
       label({
         focused: isFocused,
@@ -97,6 +110,16 @@ const TabbarItem: React.FC<Item> = ({
       })
     );
 
+  const icon = tabBarIcon
+    ? typeof tabBarIcon === 'function'
+      ? tabBarIcon({
+          focused: isFocused,
+          color: isFocused ? '#673ab7' : '#222',
+          size: sizeScale(24),
+        })
+      : tabBarIcon
+    : null;
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -104,6 +127,7 @@ const TabbarItem: React.FC<Item> = ({
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.tabbarItem}>
+      {icon}
       {content}
     </Pressable>
   );
@@ -111,14 +135,15 @@ const TabbarItem: React.FC<Item> = ({
 
 const styles = StyleSheet.create({
   tabbarContainer: {
-    height: sizeScale(66),
+    height: sizeScale(TAB_BAR_HEIGHT),
     flexDirection: 'row',
-    alignItems: 'center',
     position: 'relative',
   },
   tabbarItem: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: sizeScale(4),
   },
 });
 

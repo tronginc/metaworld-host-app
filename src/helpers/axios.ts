@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { SERVICE_ACCOUNT_API_URL, SERVICE_ACCOUNT_SERVICE_NAME } from '@env';
 import i18n from '../i18n/i18n';
+import useUserStore from '@stores/user.store';
 
 // Config default axios
 axios.defaults.baseURL = SERVICE_ACCOUNT_API_URL;
@@ -56,6 +57,16 @@ axios.interceptors.response.use(
   error => {
     if (error.response) {
       console.log(error.response.data);
+    }
+    const isUnauthorized = error.response?.status === 401;
+    if (isUnauthorized) {
+      const { clearStore, credentials } = useUserStore.getState();
+      if (credentials) {
+        clearStore();
+        return Promise.reject(new Error(getErrorMessage(error)));
+      }
+      // Skip clear store if not login
+      return;
     }
     return Promise.reject(new Error(getErrorMessage(error)));
   },

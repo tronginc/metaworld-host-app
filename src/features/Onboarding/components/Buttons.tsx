@@ -98,7 +98,10 @@ const Buttons: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <Pressable style={_prevButtonStyle} onPress={onPrev}>
+      <Pressable
+        style={_prevButtonStyle}
+        onPress={onPrev}
+        accessibilityRole="button">
         <Image
           source={arrow_left}
           height={sizeScale(16)}
@@ -112,7 +115,10 @@ const Buttons: React.FC<Props> = ({
           {prevText}
         </Text>
       </Pressable>
-      <Pressable style={_nextButtonStyle} onPress={onNext}>
+      <Pressable
+        style={_nextButtonStyle}
+        onPress={onNext}
+        accessibilityRole="button">
         <Text
           color="#C57BEA"
           fontWeight="bold"

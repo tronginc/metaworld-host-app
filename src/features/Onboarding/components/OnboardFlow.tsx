@@ -16,6 +16,7 @@ import Box from '@components/UI/Box';
 import Image from '@components/UI/Image';
 import { sizeScale } from '@helpers/scale';
 import useUserStore from '@stores/user.store';
+import Pressable from '@components/UI/Pressable';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -47,9 +48,13 @@ const OnboardFlow: React.FC<Props> = ({ pages }) => {
       swiperRef.current?.scrollToIndex({ index: currentPage + 1 });
       setCurrentPage(currentPage + 1);
     } else {
-      // Discover now (Skip onboarding)
+      // Discover now
       setFirstRun(false);
     }
+  };
+
+  const handleSkip = () => {
+    setFirstRun(false);
   };
 
   const handlePrevPage = () => {
@@ -61,6 +66,17 @@ const OnboardFlow: React.FC<Props> = ({ pages }) => {
 
   return (
     <View style={styles.container}>
+      <Pressable
+        position="absolute"
+        top={sizeScale(12)}
+        right={sizeScale(24)}
+        padding={sizeScale(8)}
+        zIndex={100}
+        onPress={handleSkip}>
+        <Text fontWeight="bold" color="#FCFCFD">
+          {t('buttons.skip')}
+        </Text>
+      </Pressable>
       <View style={styles.contentContainer}>
         <Box flex={4}>
           <SwiperFlatList ref={swiperRef} onChangeIndex={onPageChange}>
@@ -139,7 +155,7 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     width: screenWidth,
-    paddingHorizontal: 32,
+    paddingHorizontal: sizeScale(32),
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

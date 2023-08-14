@@ -1,20 +1,20 @@
-import React from 'react';
 import Screen from '@components/UI/Screen';
-import { sizeScale } from '@helpers/scale';
+import React from 'react';
 import Header from '../components/commons/Header';
+import { sizeScale } from '@helpers/scale';
 
 type Props = {};
 
-const AccountScreen: React.FC<Props> = ({}) => {
+const ExploreScreen: React.FC<Props> = ({}) => {
   return (
     <Screen
-      marginBottom={-sizeScale(20)}
       enableScroll
+      marginBottom={-sizeScale(20)}
       paddingHorizontal={sizeScale(17)}
       paddingVertical={sizeScale(8)}>
-      <Header title="Account" />
+      <Header title="Explore" />
     </Screen>
   );
 };
 
-export default AccountScreen;
+export default ExploreScreen;

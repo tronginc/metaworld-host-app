@@ -10,6 +10,9 @@ type Props = {
   style?: TextStyle;
 } & TextProps;
 
+/**
+ * Text component already scaled, don't need to scale again
+ */
 const Text: React.FC<PropsWithChildren<Props>> = ({
   fontSize = 14,
   fontWeight,
