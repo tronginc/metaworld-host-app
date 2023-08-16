@@ -1,14 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { StorageValue, persist } from 'zustand/middleware';
-import { UserCredentinals } from '../types/UserCredentinals';
+import { User, UserCredentinals } from '../types/User';
 
 interface UserState {
+  hydrated: boolean;
+
   isFirstRun: boolean;
   setFirstRun: (isFirstRun: boolean) => void;
-  hydrated: boolean;
+
   credentials?: UserCredentinals;
   setCredentials: (credentials: UserCredentinals) => void;
+
+  user?: User;
+  setUser: (user: User) => void;
+
   clearStore: () => void;
 }
 
@@ -17,9 +23,12 @@ const useUserStore = create<UserState>()(
     set => ({
       isFirstRun: true,
       hydrated: false,
+
       setFirstRun: isFirstRun => set(() => ({ isFirstRun })),
       setCredentials: credentials => set(() => ({ credentials })),
-      clearStore: () => set(() => ({ credentials: undefined })),
+      setUser: user => set(() => ({ user })),
+      clearStore: () =>
+        set(() => ({ credentials: undefined, user: undefined })),
     }),
     {
       name: 'user',
@@ -39,7 +48,12 @@ const useUserStore = create<UserState>()(
           return await AsyncStorage.removeItem(key);
         },
       },
-      partialize: state => ({ ...state, hydrated: true, isFirstRun: true }),
+      partialize: state => ({
+        ...state,
+        hydrated: true,
+        isFirstRun: true,
+        user: undefined,
+      }),
     },
   ),
 );

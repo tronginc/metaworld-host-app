@@ -1,7 +1,7 @@
 import useUserStore from '@stores/user.store';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { UserCredentinals } from 'src/types/UserCredentinals';
+import { UserCredentinals } from 'src/types/User';
 
 type Payload = {
   password: string;

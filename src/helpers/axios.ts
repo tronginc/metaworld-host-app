@@ -52,7 +52,12 @@ const getErrorMessage = (error: unknown) => {
 
 axios.interceptors.response.use(
   response => {
-    return response.data;
+    const config = response.config;
+    const method = config.method?.toUpperCase() || 'GET';
+    const url = config.url || '';
+    console.log(`[REQUEST] ${method} ${url} - SUCCESS`);
+    console.log(JSON.stringify(response.data, null, 2));
+    return response;
   },
   error => {
     if (error.response) {

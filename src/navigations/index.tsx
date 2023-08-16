@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   NativeStackNavigationOptions,
@@ -14,6 +14,8 @@ import SetPasswordScreen from '@features/Auth/screens/SetPasswordScreen';
 import SignUpScreen from '@features/Auth/screens/SignUpScreen';
 import OnboardingScreen from '@features/Onboarding/screens/OnboardingScreen';
 import TabsNavigator from './TabsNavigator';
+import axios from 'axios';
+import useUserInformationQuery from '@hooks/user/useUserInformationQuery';
 
 const RootStack = createNativeStackNavigator();
 
@@ -27,10 +29,27 @@ const switchOptions: NativeStackNavigationOptions = {
 };
 
 const AppNavigator = () => {
-  const { isFirstRun, credentials, hydrated } = useUserStore();
+  const { isFirstRun, credentials, hydrated, setUser, user } = useUserStore();
+
+  const { data: userInfo } = useUserInformationQuery();
+
   const isLoggedIn = !!credentials;
 
-  if (!hydrated) {
+  useEffect(() => {
+    if (userInfo) {
+      setUser(userInfo);
+    }
+  }, [userInfo, setUser]);
+
+  useEffect(() => {
+    if (credentials) {
+      axios.defaults.headers.common.Authorization = `Bearer ${credentials.accessToken}`;
+    } else {
+      axios.defaults.headers.common.Authorization = null;
+    }
+  }, [credentials]);
+
+  if (!hydrated || (isLoggedIn && !user)) {
     return null;
   }
 
