@@ -5,10 +5,10 @@ import { sizeScale } from '@helpers/scale';
 import { useTheme } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList } from 'react-native';
 import arrow_right from '@assets/images/icons/arrow-right.png';
 import useNewsQuery from '@features/Home/hooks/HomeScreen/useNewsQuery';
 import renderItem from './ListNewsItem';
+import { FlatGrid } from '@components/UI/Grid';
 
 type Props = {};
 
@@ -20,21 +20,17 @@ const ListNews: React.FC<Props> = ({}) => {
   }, []);
 
   return (
-    <FlatList
+    <FlatGrid
       scrollEnabled={false}
-      numColumns={2}
+      itemDimension={sizeScale(130)}
+      spacing={sizeScale(12)}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
-      ItemSeparatorComponent={ItemSeparatorComponent}
       ListHeaderComponent={ListHeaderComponent}
       data={isLoading ? placeholderData : news}
       renderItem={renderItem}
     />
   );
-};
-
-const ItemSeparatorComponent = () => {
-  return <Box height={sizeScale(12)} width={sizeScale(12)} />;
 };
 
 const ListHeaderComponent = () => {
@@ -43,6 +39,7 @@ const ListHeaderComponent = () => {
   return (
     <Box
       marginBottom={sizeScale(16)}
+      paddingHorizontal={sizeScale(12)}
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center">

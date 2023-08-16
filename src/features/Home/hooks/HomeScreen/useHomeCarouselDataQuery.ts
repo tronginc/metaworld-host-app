@@ -15,6 +15,14 @@ const useHomeCarouselDataQuery = () => {
         id: 3,
         image: 'https://imageupload.io/ib/Gd6IKdlO2jhZmJR_1692176664.png',
       },
+      {
+        id: 4,
+        image: 'https://imageupload.io/ib/Gd6IKdlO2jhZmJR_1692176664.png',
+      },
+      {
+        id: 5,
+        image: 'https://imageupload.io/ib/Gd6IKdlO2jhZmJR_1692176664.png',
+      },
     ];
   });
 };

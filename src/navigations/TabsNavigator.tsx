@@ -31,6 +31,8 @@ import tab_account_outlined from '@assets/images/icons/tab_account_outlined.png'
 import ScanScreen from '@features/Home/screens/ScanScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 const MainTabs = createBottomTabNavigator();
 
@@ -48,6 +50,7 @@ const homeOptions: BottomTabNavigationOptions = {
       height={DEFAULT_ICON_SIZE}
       width={DEFAULT_ICON_SIZE}
       tintColor={color}
+      ImageComponent={FastImage}
     />
   ),
 };
@@ -61,6 +64,7 @@ const exploreOptions: BottomTabNavigationOptions = {
       height={DEFAULT_ICON_SIZE}
       width={DEFAULT_ICON_SIZE}
       tintColor={color}
+      ImageComponent={FastImage}
     />
   ),
 };
@@ -68,7 +72,12 @@ const exploreOptions: BottomTabNavigationOptions = {
 const scanOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: () => (
-    <Image source={scan_icon} height={SCAN_ICON_SIZE} width={SCAN_ICON_SIZE} />
+    <Image
+      source={scan_icon}
+      height={SCAN_ICON_SIZE}
+      width={SCAN_ICON_SIZE}
+      ImageComponent={FastImage}
+    />
   ),
 };
 
@@ -81,6 +90,7 @@ const ticketsOptions: BottomTabNavigationOptions = {
       height={DEFAULT_ICON_SIZE}
       width={DEFAULT_ICON_SIZE}
       tintColor={color}
+      ImageComponent={FastImage}
     />
   ),
 };
@@ -94,6 +104,7 @@ const accountOptions: BottomTabNavigationOptions = {
       height={DEFAULT_ICON_SIZE}
       width={DEFAULT_ICON_SIZE}
       tintColor={color}
+      ImageComponent={FastImage}
     />
   ),
 };
@@ -103,6 +114,7 @@ const TabsNavigator: React.FC<Props> = ({}) => {
   const { colors } = useTheme();
   return (
     <Box flex={1}>
+      <StatusBar translucent backgroundColor="transparent" />
       <MainTabs.Navigator
         tabBar={Tabbar}
         // why this doesn't work?

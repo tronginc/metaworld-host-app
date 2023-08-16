@@ -8,6 +8,7 @@ import { Dimensions } from 'react-native';
 import { sizeScale } from '@helpers/scale';
 import PaginationDots from '@components/UI/PaginationDots';
 import { useTheme } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -56,6 +57,7 @@ const renderItem: ListRenderItem<Data> = ({ item }) => {
   return (
     <Box width="100%">
       <Image
+        ImageComponent={FastImage}
         uri={item.image}
         borderRadius={sizeScale(8)}
         aspectRatio={350 / 172}

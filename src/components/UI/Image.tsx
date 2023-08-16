@@ -3,12 +3,14 @@ import { useTheme } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { ImageProps, ImageStyle, StyleSheet } from 'react-native';
 import { Image as RNImage } from 'react-native';
+import FastImage from 'react-native-fast-image';
 type Props = {
   width?: ImageStyle['width'];
   height?: ImageStyle['height'];
   borderRadius?: ImageStyle['borderRadius'];
   aspectRatio?: ImageStyle['aspectRatio'];
   showPlaceholder?: boolean;
+  ImageComponent?: typeof RNImage | typeof FastImage;
 } & Omit<ImageProps, 'source'> &
   (
     | {
@@ -28,6 +30,8 @@ const Image: React.FC<Props> = ({
   borderRadius,
   aspectRatio,
   showPlaceholder,
+  ImageComponent,
+  style: overrideStyle,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -41,7 +45,7 @@ const Image: React.FC<Props> = ({
     return require('@assets/images/placeholder.jpg');
   }, [props]);
 
-  const style = useMemo(() => {
+  const style = useMemo<ImageStyle>(() => {
     return StyleSheet.flatten([
       width && { width: typeof width === 'number' ? sizeScale(width) : width },
       height && {
@@ -55,6 +59,7 @@ const Image: React.FC<Props> = ({
       },
       aspectRatio && { aspectRatio },
       showPlaceholder && { backgroundColor: colors.placeholder },
+      overrideStyle,
     ]) as ImageStyle;
   }, [
     width,
@@ -63,7 +68,12 @@ const Image: React.FC<Props> = ({
     aspectRatio,
     showPlaceholder,
     colors.placeholder,
+    overrideStyle,
   ]);
+  if (ImageComponent) {
+    // @ts-ignore
+    return <ImageComponent source={imageSource} {...props} style={style} />;
+  }
   return <RNImage source={imageSource} {...props} style={style} />;
 };
 
