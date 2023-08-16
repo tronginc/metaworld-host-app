@@ -4,5 +4,10 @@
     "explore": "Explore",
     "tickets": "Tickets",
     "account": "Account"
+  },
+  "home_screen": {
+    "product": "Product",
+    "news": "News",
+    "next": "Next"
   }
 }

@@ -8,6 +8,7 @@ type Props = {
   color?: TextStyle['color'];
   fontFamily?: TextStyle['fontFamily'];
   style?: TextStyle;
+  numberOfLines?: number;
 } & TextProps;
 
 /**

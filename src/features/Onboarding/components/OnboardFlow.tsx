@@ -7,7 +7,7 @@ import {
   View,
   Image as RNImage,
 } from 'react-native';
-import PaginationDots from './PaginationDots';
+import PaginationDots from '../../../components/UI/PaginationDots';
 import Buttons from './Buttons';
 import { useTranslation } from 'react-i18next';
 import { SwiperFlatListRefProps } from '@components/UI/SwiperFlatList/SwiperProps';
@@ -17,6 +17,7 @@ import Image from '@components/UI/Image';
 import { sizeScale } from '@helpers/scale';
 import useUserStore from '@stores/user.store';
 import Pressable from '@components/UI/Pressable';
+import { useTheme } from '@react-navigation/native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -36,6 +37,7 @@ const OnboardFlow: React.FC<Props> = ({ pages }) => {
   const { t } = useTranslation('onboarding');
   const swiperRef = useRef<SwiperFlatListRefProps>(null);
   const { setFirstRun } = useUserStore();
+  const { colors } = useTheme();
 
   const onPageChange: ComponentProps<
     typeof SwiperFlatList
@@ -73,7 +75,7 @@ const OnboardFlow: React.FC<Props> = ({ pages }) => {
         padding={sizeScale(8)}
         zIndex={100}
         onPress={handleSkip}>
-        <Text fontWeight="bold" color="#FCFCFD">
+        <Text fontWeight="bold" color={colors.text}>
           {t('buttons.skip')}
         </Text>
       </Pressable>
@@ -89,8 +91,8 @@ const OnboardFlow: React.FC<Props> = ({ pages }) => {
           <PaginationDots
             currentPage={currentPage}
             totalPages={totalPages}
-            paginationColor="#C4C4C4"
-            paginationSelectedColor="#FCFCFD"
+            paginationColor="#E4E8F1"
+            paginationSelectedColor="#2D3758"
           />
         </Box>
       </View>
@@ -121,6 +123,8 @@ const OnboardPage: React.FC<Page> = ({ title, subtitle, imageSource }) => {
     return { height: newHeight, width: IMAGE_WIDTH };
   }, [imageSource]);
 
+  const { colors } = useTheme();
+
   return (
     <View style={styles.pageContainer}>
       <Box
@@ -135,7 +139,7 @@ const OnboardPage: React.FC<Page> = ({ title, subtitle, imageSource }) => {
           height={height}
         />
       </Box>
-      <Text fontSize={28} style={styles.title}>
+      <Text fontSize={28} style={styles.title} color={colors.text}>
         {title}
       </Text>
       <Text fontSize={14} style={styles.subtitleStyle}>
@@ -163,14 +167,13 @@ const styles = StyleSheet.create({
     marginTop: sizeScale(60),
     fontFamily: 'HelveticaNowDisplay',
     fontWeight: 'bold',
-    color: '#FCFCFD',
     textAlign: 'center',
   },
   subtitleStyle: {
     marginTop: sizeScale(16),
     fontFamily: 'HelveticaNowDisplay',
-    color: '#707A8F',
     textAlign: 'center',
+    color: '#7886A5',
   },
 });
 

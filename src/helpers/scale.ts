@@ -16,5 +16,6 @@ const scale = (size: number) => (shortDimension / guidelineBaseWidth) * size;
 const verticalScale = (size: number) =>
   (longDimension / guidelineBaseHeight) * size;
 
-export const sizeScale = (size: number, factor = 0.5) =>
-  size + (scale(size) - size) * factor;
+export const sizeScale = (size: number, factor = 0.5) => {
+  return size + (scale(size) - size) * factor;
+};

@@ -11,12 +11,14 @@ import Animated, {
   useSharedValue,
   withTiming,
   interpolate,
+  interpolateColor,
 } from 'react-native-reanimated';
 import Text from '@components/UI/Text';
 import Image from '@components/UI/Image';
 import arrow_left from '@assets/images/icons/arrow-left.png';
 import arrow_right from '@assets/images/icons/arrow-right.png';
 import { sizeScale } from '@helpers/scale';
+import { useTheme } from '@react-navigation/native';
 
 const Pressable = Animated.createAnimatedComponent(RNPressable);
 
@@ -36,6 +38,7 @@ const BUTTON_WIDTH = (screenWidth - 16 * 2) / 2;
 
 const Buttons: React.FC<Props> = ({
   hasPrevPage,
+  hasNextPage,
   onPrev,
   onNext,
   prevText = 'Previous',
@@ -43,10 +46,28 @@ const Buttons: React.FC<Props> = ({
 }) => {
   const animatedValue = useSharedValue(0);
   const textAnimatedValue = useSharedValue(1);
+  const hasNextPageAnimatedValue = useSharedValue(hasNextPage ? 1 : 0);
+
+  const { colors } = useTheme();
+
+  const shouldHidePrevButton = useMemo(() => {
+    // Hide prev button on first page
+    // Hide prev button on last page
+    // Show prev button on other pages
+    return !hasPrevPage || !hasNextPage;
+  }, [hasPrevPage, hasNextPage]);
 
   useEffect(() => {
-    animatedValue.value = withTiming(hasPrevPage ? 1 : 0);
-  }, [animatedValue, hasPrevPage]);
+    if (shouldHidePrevButton) {
+      animatedValue.value = withTiming(0);
+    } else {
+      animatedValue.value = withTiming(1);
+    }
+  }, [animatedValue, shouldHidePrevButton]);
+
+  useEffect(() => {
+    hasNextPageAnimatedValue.value = withTiming(hasNextPage ? 1 : 0);
+  }, [hasNextPage, hasNextPageAnimatedValue]);
 
   useEffect(() => {
     textAnimatedValue.value = withTiming(0);
@@ -68,6 +89,7 @@ const Buttons: React.FC<Props> = ({
       alignItems: 'center',
       borderRadius: 12,
       height: 48,
+      backgroundColor: 'transparent',
     }),
     [animatedValue],
   );
@@ -79,7 +101,11 @@ const Buttons: React.FC<Props> = ({
         [0, 1],
         [BUTTON_WIDTH * 2, BUTTON_WIDTH],
       ),
-      backgroundColor: '#161C37',
+      backgroundColor: interpolateColor(
+        hasNextPageAnimatedValue.value,
+        [0, 1],
+        [colors.primary, colors.background],
+      ),
       borderRadius: 12,
       justifyContent: 'center',
       alignItems: 'center',
@@ -103,12 +129,13 @@ const Buttons: React.FC<Props> = ({
         onPress={onPrev}
         accessibilityRole="button">
         <Image
+          tintColor={colors.text}
           source={arrow_left}
-          height={sizeScale(16)}
-          width={sizeScale(16)}
+          height={16}
+          width={16}
         />
         <Text
-          color="white"
+          color={colors.text}
           fontWeight="bold"
           fontFamily="OpenSans"
           fontSize={14}>
@@ -120,7 +147,7 @@ const Buttons: React.FC<Props> = ({
         onPress={onNext}
         accessibilityRole="button">
         <Text
-          color="#C57BEA"
+          color={hasNextPage ? colors.primary : 'white'}
           fontWeight="bold"
           fontFamily="OpenSans"
           fontSize={14}>
@@ -128,8 +155,9 @@ const Buttons: React.FC<Props> = ({
         </Text>
         <Image
           source={arrow_right}
-          height={sizeScale(16)}
-          width={sizeScale(16)}
+          tintColor={hasNextPage ? colors.primary : 'white'}
+          height={16}
+          width={16}
         />
       </Pressable>
     </View>

@@ -17,62 +17,92 @@ import ExploreScreen from '@features/Home/screens/ExploreScreen';
 import TicketsScreen from '@features/Home/screens/TicketsScreen';
 
 import scan_icon from '@assets/images/icons/scan.png';
-import tab_account from '@assets/images/icons/tab_account.png';
-import tab_explore from '@assets/images/icons/tab_explore.png';
-import tab_home from '@assets/images/icons/tab_home.png';
-import tab_ticket from '@assets/images/icons/tab_ticket.png';
+
+import tab_home_fill from '@assets/images/icons/tab_home_fill.png';
+import tab_explore_fill from '@assets/images/icons/tab_explore_fill.png';
+import tab_ticket_fill from '@assets/images/icons/tab_ticket_fill.png';
+import tab_account_fill from '@assets/images/icons/tab_account_fill.png';
+
+import tab_home_outlined from '@assets/images/icons/tab_home_outlined.png';
+import tab_explore_outlined from '@assets/images/icons/tab_explore_outlined.png';
+import tab_ticket_outlined from '@assets/images/icons/tab_ticket_outlined.png';
+import tab_account_outlined from '@assets/images/icons/tab_account_outlined.png';
+
 import ScanScreen from '@features/Home/screens/ScanScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '@react-navigation/native';
 
 const MainTabs = createBottomTabNavigator();
 
 type Props = {};
 
-const ICON_SIZE = sizeScale(24);
+const DEFAULT_ICON_SIZE = sizeScale(24);
+const SCAN_ICON_SIZE = sizeScale(44);
 
 const homeOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: i18n.t('home:bottom_tabs.home'),
-  tabBarIcon: () => (
-    <Image source={tab_home} height={ICON_SIZE} width={ICON_SIZE} />
+  tabBarIcon: ({ focused, color }) => (
+    <Image
+      source={focused ? tab_home_fill : tab_home_outlined}
+      height={DEFAULT_ICON_SIZE}
+      width={DEFAULT_ICON_SIZE}
+      tintColor={color}
+    />
   ),
 };
 
-const exploreOptions = {
+const exploreOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: i18n.t('home:bottom_tabs.explore'),
-  tabBarIcon: () => (
-    <Image source={tab_explore} height={ICON_SIZE} width={ICON_SIZE} />
+  tabBarIcon: ({ focused, color }) => (
+    <Image
+      source={focused ? tab_explore_fill : tab_explore_outlined}
+      height={DEFAULT_ICON_SIZE}
+      width={DEFAULT_ICON_SIZE}
+      tintColor={color}
+    />
   ),
 };
 
-const scanOptions = {
+const scanOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: () => (
-    <Box position="absolute" top="-50%">
-      <Image source={scan_icon} height={sizeScale(56)} width={sizeScale(56)} />
-    </Box>
+    <Image source={scan_icon} height={SCAN_ICON_SIZE} width={SCAN_ICON_SIZE} />
   ),
 };
 
-const ticketsOptions = {
+const ticketsOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: i18n.t('home:bottom_tabs.tickets'),
-  tabBarIcon: () => (
-    <Image source={tab_ticket} height={ICON_SIZE} width={ICON_SIZE} />
+  tabBarIcon: ({ focused, color }) => (
+    <Image
+      source={focused ? tab_ticket_fill : tab_ticket_outlined}
+      height={DEFAULT_ICON_SIZE}
+      width={DEFAULT_ICON_SIZE}
+      tintColor={color}
+    />
   ),
 };
 
-const accountOptions = {
+const accountOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarLabel: i18n.t('home:bottom_tabs.account'),
-  tabBarIcon: () => (
-    <Image source={tab_account} height={ICON_SIZE} width={ICON_SIZE} />
+  tabBarIcon: ({ focused, color }) => (
+    <Image
+      source={focused ? tab_account_fill : tab_account_outlined}
+      height={DEFAULT_ICON_SIZE}
+      width={DEFAULT_ICON_SIZE}
+      tintColor={color}
+    />
   ),
 };
 
 const TabsNavigator: React.FC<Props> = ({}) => {
+  const { bottom } = useSafeAreaInsets();
+  const { colors } = useTheme();
   return (
-    <Box flex={1} safeAreaEdge="all">
+    <Box flex={1}>
       <MainTabs.Navigator
         tabBar={Tabbar}
         // why this doesn't work?
@@ -114,6 +144,7 @@ const TabsNavigator: React.FC<Props> = ({}) => {
           options={accountOptions}
         />
       </MainTabs.Navigator>
+      <Box height={bottom} backgroundColor={colors.card} />
     </Box>
   );
 };

@@ -1,11 +1,16 @@
-import { DefaultTheme, Theme } from '@react-navigation/native';
+import { DefaultTheme } from '@react-navigation/native';
 
-const defaultTheme: Theme = {
+const defaultTheme = {
   ...DefaultTheme,
+  dark: false,
   colors: {
     ...DefaultTheme.colors,
-    background: 'transparent',
+    background: '#F4F4F6',
+    card: '#FFFFFF',
+    primary: '#BB274B',
+    text: '#070C21',
+    placeholder: '#dfdfdf',
   },
-};
+} as const;
 
 export default defaultTheme;

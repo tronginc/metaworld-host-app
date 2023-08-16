@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
-import useLoginMutation from '@hooks/auth/useLoginMutation';
+import useLoginMutation from '@features/Auth/hooks/useLoginMutation';
 
 type Props = {};
 

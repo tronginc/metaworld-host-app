@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = ViewStyle & {
   safeAreaEdge?: keyof typeof safeAreaEdges;
+  style?: ViewStyle;
 };
 
 const safeAreaEdges = {
@@ -22,11 +23,13 @@ const safeAreaEdges = {
 const Box: React.FC<PropsWithChildren<Props>> = ({
   children,
   safeAreaEdge = 'none',
+  style: overrideStyle,
   ...styleProps
 }) => {
   const style = useMemo(() => {
-    return StyleSheet.flatten(styleProps);
-  }, [styleProps]);
+    return StyleSheet.flatten([styleProps, overrideStyle]);
+  }, [overrideStyle, styleProps]);
+
   const safeAreaEdgesToApply = useMemo(() => {
     return safeAreaEdges[safeAreaEdge];
   }, [safeAreaEdge]);

@@ -1,15 +1,22 @@
 import React, { useCallback } from 'react';
-import { ImageBackground, Pressable, StyleSheet } from 'react-native';
-import tabbar_frame from '@assets/images/icons/tabbar-frame.png';
+import { Pressable, StyleSheet } from 'react-native';
 import { sizeScale } from '@helpers/scale';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { LabelPosition } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import Box from './Box';
-import GradientText from './GradientText';
+import Text from './Text';
+import { useTheme } from '@react-navigation/native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 const TAB_BAR_HEIGHT = 66;
 
 const Tabbar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const { colors } = useTheme();
   return (
     <Box position="relative">
       <Box
@@ -18,10 +25,10 @@ const Tabbar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         right={0}
         bottom={0}
         zIndex={1}
-        top={sizeScale(TAB_BAR_HEIGHT - 1)}
-        // backgroundColor="#04040F"
+        top={sizeScale(TAB_BAR_HEIGHT + 1)}
+        backgroundColor={colors.card}
       />
-      <ImageBackground style={styles.tabbarContainer} source={tabbar_frame}>
+      <Box backgroundColor={colors.card} style={styles.tabbarContainer}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const label =
@@ -42,7 +49,7 @@ const Tabbar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             />
           );
         })}
-      </ImageBackground>
+      </Box>
     </Box>
   );
 };
@@ -74,6 +81,9 @@ const TabbarItem: React.FC<Item> = ({
   label,
   tabBarIcon,
 }) => {
+  const { colors } = useTheme();
+  const animated = useSharedValue(0);
+
   const onLongPress = useCallback(() => {
     navigation.emit({
       type: 'tabLongPress',
@@ -96,15 +106,29 @@ const TabbarItem: React.FC<Item> = ({
 
   const accessibilityState = isFocused ? { selected: true } : {};
 
+  const color = isFocused ? colors.primary : '#A9B3C6';
+
+  const onPressIn = () => {
+    animated.value = withSpring(1, {
+      duration: 300,
+    });
+  };
+
+  const onPressOut = () => {
+    animated.value = withSpring(0, {
+      duration: 300,
+    });
+  };
+
   const content =
     typeof label === 'string' ? (
-      <GradientText colors={isFocused ? undefined : ['#49566E', '#49566E']}>
+      <Text fontSize={11} color={color}>
         {label}
-      </GradientText>
+      </Text>
     ) : (
       label({
         focused: isFocused,
-        color: isFocused ? '#673ab7' : '#222',
+        color,
         position: 'below-icon',
         children: '',
       })
@@ -114,21 +138,34 @@ const TabbarItem: React.FC<Item> = ({
     ? typeof tabBarIcon === 'function'
       ? tabBarIcon({
           focused: isFocused,
-          color: isFocused ? '#673ab7' : '#222',
+          color: color,
           size: sizeScale(24),
         })
       : tabBarIcon
     : null;
 
+  const gap = sizeScale(4);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: interpolate(animated.value, [0, 1], [1, 1.2]) }],
+      gap,
+      alignItems: 'center',
+    };
+  }, []);
+
   return (
     <Pressable
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
       accessibilityRole="button"
       accessibilityState={accessibilityState}
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.tabbarItem}>
-      {icon}
-      {content}
+      <Animated.View style={animatedStyle}>
+        {icon}
+        {content}
+      </Animated.View>
     </Pressable>
   );
 };
@@ -143,8 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: sizeScale(4),
   },
 });
 
-export default Tabbar;
+export default (props: BottomTabBarProps) => <Tabbar {...props} />;

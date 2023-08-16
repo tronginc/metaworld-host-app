@@ -34,7 +34,7 @@ const OnboardingScreen: React.FC<Props> = ({}) => {
   }, [t]);
 
   return (
-    <Screen safeAreaEdge="all" backgroundColor={colors.background}>
+    <Screen safeAreaEdge="all" backgroundColor={colors.card}>
       <OnboardFlow pages={pages} />
     </Screen>
   );

@@ -23,6 +23,7 @@ const useUserStore = create<UserState>()(
     }),
     {
       name: 'user',
+      version: 1,
       storage: {
         getItem: async key => {
           const value = await AsyncStorage.getItem(key);
@@ -38,7 +39,7 @@ const useUserStore = create<UserState>()(
           return await AsyncStorage.removeItem(key);
         },
       },
-      partialize: state => ({ ...state, hydrated: true }), //isFirstRun: true }),
+      partialize: state => ({ ...state, hydrated: true, isFirstRun: true }),
     },
   ),
 );
