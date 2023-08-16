@@ -16,7 +16,9 @@ type Payload = {
 
 const useVerifyRegisterMutation = () => {
   return useMutation<Payload, Error, Payload>(['register'], async payload => {
-    return axios.post('/api/account/verify-register', payload);
+    return axios
+      .post('/api/account/verify-register', payload)
+      .then(response => response.data);
   });
 };
 

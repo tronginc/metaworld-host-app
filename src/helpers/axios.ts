@@ -1,7 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { SERVICE_ACCOUNT_API_URL, SERVICE_ACCOUNT_SERVICE_NAME } from '@env';
-import i18n from '../i18n/i18n';
 import useUserStore from '@stores/user.store';
+import { getRequestError } from '@utils/string';
 
 // Config default axios
 axios.defaults.baseURL = SERVICE_ACCOUNT_API_URL;
@@ -13,42 +13,6 @@ axios.interceptors.request.use(config => {
   console.log(`[REQUEST] ${method} ${url}`);
   return config;
 });
-
-const getErrorMessage = (error: unknown) => {
-  if (error instanceof AxiosError) {
-    // Check network error
-    if (!error.response) {
-      return i18n.t('messages.api_errors.network_error');
-    }
-    if (error.response.status === 401) {
-      return i18n.t('messages.api_errors.unauthorized');
-    }
-    if (error.response.status === 403) {
-      return i18n.t('messages.api_errors.forbidden');
-    }
-    if (error.response.status === 404) {
-      return i18n.t('messages.api_errors.not_found');
-    }
-    if (error.response.status === 500) {
-      return i18n.t('messages.api_errors.internal_server_error');
-    }
-    if (error.response.data?.message) {
-      return error.response.data.message;
-    }
-  }
-
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  if (typeof error === 'string') {
-    return error;
-  }
-
-  console.log(error);
-
-  return i18n.t('messages.api_errors.unknown_error');
-};
 
 axios.interceptors.response.use(
   response => {
@@ -68,11 +32,11 @@ axios.interceptors.response.use(
       const { clearStore, credentials } = useUserStore.getState();
       if (credentials) {
         clearStore();
-        return Promise.reject(new Error(getErrorMessage(error)));
+        return Promise.reject(new Error(getRequestError(error)));
       }
       // Skip clear store if not login
       return;
     }
-    return Promise.reject(new Error(getErrorMessage(error)));
+    return Promise.reject(new Error(getRequestError(error)));
   },
 );

@@ -31,7 +31,7 @@ const switchOptions: NativeStackNavigationOptions = {
 const AppNavigator = () => {
   const { isFirstRun, credentials, hydrated, setUser, user } = useUserStore();
 
-  const { data: userInfo } = useUserInformationQuery();
+  const { data: userInfo, isLoading } = useUserInformationQuery();
 
   const isLoggedIn = !!credentials;
 
@@ -49,7 +49,11 @@ const AppNavigator = () => {
     }
   }, [credentials]);
 
-  if (!hydrated || (isLoggedIn && !user)) {
+  if (!hydrated) {
+    return null;
+  }
+
+  if (!isLoggedIn && !user && !isLoading) {
     return null;
   }
 

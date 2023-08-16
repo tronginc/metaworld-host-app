@@ -21,7 +21,9 @@ const useLoginMutation = () => {
   return useMutation<UserCredentinals, Error, Payload>(
     ['login'],
     async payload => {
-      return axios.post('/api/account/login', payload);
+      return axios
+        .post('/api/account/login', payload)
+        .then(response => response.data);
     },
     {
       onSuccess: setCredentials,

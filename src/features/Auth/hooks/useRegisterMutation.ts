@@ -17,7 +17,9 @@ type Payload = {
 
 const useRegisterMutation = () => {
   return useMutation<Payload, Error, Payload>(['register'], async payload => {
-    return axios.post('/api/account/register', payload);
+    return axios
+      .post('/api/account/register', payload)
+      .then(response => response.data);
   });
 };
 

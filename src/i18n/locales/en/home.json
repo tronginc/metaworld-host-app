@@ -26,7 +26,8 @@
       "assets": "Assets",
       "support": "Support",
       "about_us": "About us",
-      "referral": "Referral"
+      "referral": "Referral",
+      "logout": "Logout"
     }
   }
 }

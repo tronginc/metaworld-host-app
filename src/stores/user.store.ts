@@ -51,8 +51,9 @@ const useUserStore = create<UserState>()(
       partialize: state => ({
         ...state,
         hydrated: true,
-        isFirstRun: true,
+        // isFirstRun: true,
         user: undefined,
+        // credentials: undefined,
       }),
     },
   ),

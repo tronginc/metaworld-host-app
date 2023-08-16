@@ -7,8 +7,8 @@ const useUserInformationQuery = () => {
   const { credentials } = useUserStore();
 
   return useQuery(
-    ['user', 'information'],
-    () => {
+    ['user', 'information', credentials?.accessToken],
+    async () => {
       return axios
         .get<User>('/api/account/information', {
           headers: {

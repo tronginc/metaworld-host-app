@@ -5,6 +5,7 @@
     "forbidden": "You do not have permission to perform this action",
     "not_found": "The requested resource was not found",
     "internal_server_error": "An internal server error occurred",
+    "service_unavailable": "The service is currently unavailable",
     "unknown_error": "An unknown error occurred"
   }
 }
