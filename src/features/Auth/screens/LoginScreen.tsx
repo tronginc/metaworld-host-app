@@ -7,7 +7,7 @@ import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
 import useLoginMutation from '@features/Auth/hooks/useLoginMutation';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
 import Image from '@components/UI/Image';
@@ -15,19 +15,21 @@ import Text from '@components/UI/Text';
 import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import PressableText from '@components/UI/PressableText';
+import ScreenList from '@constants/screenList';
 
 type Props = {};
 
 const LoginScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('auth');
   const { colors } = useTheme();
+  const { navigate } = useNavigation();
   const schema = useMemo(() => {
     return yup
       .object({
         // Check if email is email or phone using only yup
         email_or_phone: yup
           .string()
-          .required(t('errors.email_is_required'))
+          .required(t('errors.email_or_phone_is_required'))
           .test(
             'is-email-or-phone',
             t('errors.email_or_phone_is_invalid'),
@@ -86,6 +88,14 @@ const LoginScreen: React.FC<Props> = ({}) => {
     return mutate(payload);
   };
 
+  const hanlePressSignUp = () => {
+    navigate(ScreenList.AUTH_SIGN_UP);
+  };
+
+  const hanlePressForgotPassword = () => {
+    navigate(ScreenList.AUTH_FORGOT_PASSWORD);
+  };
+
   return (
     <Screen enableScroll safeAreaEdge="all" backgroundColor={colors.background}>
       <Box paddingVertical={sizeScale(36)}>
@@ -127,6 +137,7 @@ const LoginScreen: React.FC<Props> = ({}) => {
             placeholder={t('forms.input_password')}
             autoComplete="password"
             control={methods.control}
+            onEndEditing={methods.handleSubmit(handleSubmit)}
           />
           <Box
             marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area
@@ -140,6 +151,7 @@ const LoginScreen: React.FC<Props> = ({}) => {
               </Text>
             </Box>
             <PressableText
+              onPress={hanlePressForgotPassword}
               fontSize={14}
               color={colors.primary}
               padding={sizeScale(4)}
@@ -160,6 +172,7 @@ const LoginScreen: React.FC<Props> = ({}) => {
               {t('labels.dont_have_an_account')}
             </Text>
             <PressableText
+              onPress={hanlePressSignUp}
               padding={sizeScale(4)}
               fontSize={14}
               color={colors.primary}

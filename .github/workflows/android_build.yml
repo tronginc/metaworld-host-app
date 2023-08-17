@@ -74,7 +74,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: html
           message: |
-            <b>${{ github.actor }} created pr:</b>
+            <b>${{ github.actor }} created PR:</b>
 
             Message:
             <tg-spoiler>${{ github.event.commits[0].message }}</tg-spoiler>

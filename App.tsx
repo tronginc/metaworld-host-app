@@ -8,7 +8,7 @@ import {
   onlineManager,
 } from '@tanstack/react-query';
 import queryClient from '@helpers/queryClient';
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import { AppState, AppStateStatus, Platform, StatusBar } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -49,6 +49,13 @@ const App: React.FC = () => {
             },
           }}>
           <AppNavigator />
+          {Platform.OS === 'android' ? (
+            <StatusBar
+              translucent
+              barStyle="dark-content"
+              backgroundColor="transparent"
+            />
+          ) : null}
         </SafeAreaProvider>
       </I18nextProvider>
     </QueryClientProvider>

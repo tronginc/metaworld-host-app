@@ -5,6 +5,7 @@ import { User, UserCredentinals } from '../types/User';
 
 interface UserState {
   hydrated: boolean;
+  hydrateFinished: () => void;
 
   isFirstRun: boolean;
   setFirstRun: (isFirstRun: boolean) => void;
@@ -22,7 +23,9 @@ const useUserStore = create<UserState>()(
   persist(
     set => ({
       isFirstRun: true,
+
       hydrated: false,
+      hydrateFinished: () => set(() => ({ hydrated: true })),
 
       setFirstRun: isFirstRun => set(() => ({ isFirstRun })),
       setCredentials: credentials => set(() => ({ credentials })),
@@ -50,11 +53,18 @@ const useUserStore = create<UserState>()(
       },
       partialize: state => ({
         ...state,
-        hydrated: true,
+        hydrated: false,
         // isFirstRun: true,
         user: undefined,
         // credentials: undefined,
       }),
+      onRehydrateStorage: () => {
+        return state => {
+          if (state) {
+            state.hydrateFinished();
+          }
+        };
+      },
     },
   ),
 );

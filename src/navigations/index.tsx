@@ -19,13 +19,9 @@ import useUserInformationQuery from '@hooks/user/useUserInformationQuery';
 
 const RootStack = createNativeStackNavigator();
 
-const defaultOptions = {
+const defaultOptions: NativeStackNavigationOptions = {
   headerShown: false,
-};
-
-const switchOptions: NativeStackNavigationOptions = {
-  animation: 'flip',
-  headerShown: false,
+  animation: 'slide_from_right',
 };
 
 const AppNavigator = () => {
@@ -59,28 +55,28 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer theme={defaultTheme}>
-      <RootStack.Navigator screenOptions={switchOptions}>
+      <RootStack.Navigator screenOptions={defaultOptions}>
         {isFirstRun ? (
           <RootStack.Screen
             name={ScreenList.ONBOARDING}
             component={OnboardingScreen}
-            options={switchOptions}
+            options={defaultOptions}
           />
         ) : isLoggedIn ? (
           <RootStack.Screen
             name={ScreenList.MAIN_TABS}
             component={TabsNavigator}
-            options={switchOptions}
+            options={defaultOptions}
           />
         ) : (
           <>
             <RootStack.Screen
               name={ScreenList.AUTH_LOGIN}
               component={LoginScreen}
-              options={switchOptions}
+              options={defaultOptions}
             />
             <RootStack.Screen
-              name={ScreenList.AUTH_SIGNUP}
+              name={ScreenList.AUTH_SIGN_UP}
               component={SignUpScreen}
               options={defaultOptions}
             />
