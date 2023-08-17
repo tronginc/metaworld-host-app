@@ -67,7 +67,6 @@ jobs:
           keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - uses: actions/checkout@master
       - name: Send Telegram Notification
         uses: appleboy/telegram-action@master
         with:
