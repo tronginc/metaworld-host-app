@@ -72,5 +72,12 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Android Build Completed
-          message_file: ${{steps.sign_app.outputs.signedReleaseFile}}
+          format: html
+          message: |
+            <b>${{ github.actor }} created pr:</b>
+
+            Message:
+            <tg-spoiler>${{ github.event.commits[0].message }}</tg-spoiler>
+
+            <i>See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}</i>
+          document: ${{steps.sign_app.outputs.signedReleaseFile}}
