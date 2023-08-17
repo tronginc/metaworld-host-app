@@ -23,7 +23,6 @@
 		6645C154BD574FABA903CC6D /* HelveticaNowDisplay-BoldIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0F30FC7986243019C8C2404 /* HelveticaNowDisplay-BoldIta.otf */; };
 		7699B88040F8A987B510C191 /* libPods-Metaworld-MetaworldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Metaworld-MetaworldTests.a */; };
 		7702E61639864DAC971E681C /* HelveticaNowDisplay-LightIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = 141FAD82E02B47C99074722C /* HelveticaNowDisplay-LightIta.otf */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85AD3F01270A4FE7A43A82BE /* HelveticaNowDisplay-BlackIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8B9BEF3A1E5A49C280022AE7 /* HelveticaNowDisplay-BlackIta.otf */; };
 		8AF92D3D995F40488B0EE5A8 /* HelveticaNowDisplay-ExtLtIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = D63D9CECD6FC41B186BE6B47 /* HelveticaNowDisplay-ExtLtIta.otf */; };
 		ADA2B5BCAEAD4FD790FB2254 /* HelveticaNowDisplay-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 11F1B7C13FC0486E8346D078 /* HelveticaNowDisplay-Thin.otf */; };
@@ -32,6 +31,7 @@
 		CC3EE0E62B044B57ABFB5F8F /* HelveticaNowDisplay-RegIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2ED507EA0FCD4EE29A585747 /* HelveticaNowDisplay-RegIta.otf */; };
 		D90555B7710348B8B55488F0 /* HelveticaNowDisplay-ExtBdIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = 617EBCB976A647058D61933C /* HelveticaNowDisplay-ExtBdIta.otf */; };
 		E89409F3719A4D7C87F8E0AE /* HelveticaNowDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 740C23521F4C441ABFA451D3 /* HelveticaNowDisplay-Regular.otf */; };
+		EFC0CBDB2A8E9B1C0062E989 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFC0CBDA2A8E9B1C0062E989 /* BootSplash.storyboard */; };
 		F0F5E06B5B7749C3A7F1BD42 /* HelveticaNowDisplay-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 396608F8EC5A4DB99E9E5B9B /* HelveticaNowDisplay-Light.otf */; };
 		FA1E05B80D274214A0C63DB5 /* HelveticaNowDisplay-ExtBlkIta.otf in Resources */ = {isa = PBXBuildFile; fileRef = 98B0877C37234868B392A14F /* HelveticaNowDisplay-ExtBlkIta.otf */; };
 /* End PBXBuildFile section */
@@ -73,7 +73,6 @@
 		6E9ACF4F6F5540969CB56AFE /* HelveticaNowDisplay-MedIta.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-MedIta.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-MedIta.otf"; sourceTree = "<group>"; };
 		740C23521F4C441ABFA451D3 /* HelveticaNowDisplay-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-Regular.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-Regular.otf"; sourceTree = "<group>"; };
 		77FDAEF1A4714B5EB7069558 /* HelveticaNowDisplay-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-Medium.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-Medium.otf"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Metaworld/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Metaworld-MetaworldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Metaworld-MetaworldTests.release.xcconfig"; path = "Target Support Files/Pods-Metaworld-MetaworldTests/Pods-Metaworld-MetaworldTests.release.xcconfig"; sourceTree = "<group>"; };
 		8B9BEF3A1E5A49C280022AE7 /* HelveticaNowDisplay-BlackIta.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-BlackIta.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-BlackIta.otf"; sourceTree = "<group>"; };
 		98B0877C37234868B392A14F /* HelveticaNowDisplay-ExtBlkIta.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-ExtBlkIta.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-ExtBlkIta.otf"; sourceTree = "<group>"; };
@@ -84,6 +83,7 @@
 		E0F30FC7986243019C8C2404 /* HelveticaNowDisplay-BoldIta.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-BoldIta.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-BoldIta.otf"; sourceTree = "<group>"; };
 		E62A45BB10A149F7A2240EBF /* HelveticaNowDisplay-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNowDisplay-ExtraBold.otf"; path = "../src/assets/fonts/HelveticaNowDisplay-ExtraBold.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EFC0CBDA2A8E9B1C0062E989 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = Metaworld/BootSplash.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +130,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				EFC0CBDA2A8E9B1C0062E989 /* BootSplash.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = Metaworld;
@@ -310,8 +310,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				EFC0CBDB2A8E9B1C0062E989 /* BootSplash.storyboard in Resources */,
 				1161831A10954294881DC11E /* HelveticaNowDisplay-Black.otf in Resources */,
 				85AD3F01270A4FE7A43A82BE /* HelveticaNowDisplay-BlackIta.otf in Resources */,
 				432FB87DAF0C498CAEA5AFE2 /* HelveticaNowDisplay-Bold.otf in Resources */,
@@ -572,12 +572,13 @@
 			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Metaworld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3Y443HRJ3S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Metaworld/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Metaworld;
+				INFOPLIST_KEY_CFBundleDisplayName = "Metaworld Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -602,11 +603,12 @@
 			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Metaworld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3Y443HRJ3S;
 				INFOPLIST_FILE = Metaworld/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Metaworld;
+				INFOPLIST_KEY_CFBundleDisplayName = "Metaworld Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

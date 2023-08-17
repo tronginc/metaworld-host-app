@@ -76,8 +76,7 @@ jobs:
           message: |
             <b>${{ github.actor }} created PR:</b>
 
-            Message:
-            <tg-spoiler>${{ github.event.commits[0].message }}</tg-spoiler>
-
             <i>See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}</i>
+
+            <i>APK file generated below:</i>
           document: ${{steps.sign_app.outputs.signedReleaseFile}}

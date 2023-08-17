@@ -120,7 +120,7 @@ const SignUpScreen: React.FC<Props> = ({}) => {
             <Text fontWeight="bold" fontSize={28} color={colors.text}>
               {t('labels.create_an_account')}
             </Text>
-            <Text fontSize={16} color="#8D9BB9">
+            <Text textAlign="center" fontSize={16} color="#8D9BB9">
               {t('labels.please_enter_your_details')}
             </Text>
           </Box>
@@ -153,7 +153,7 @@ const SignUpScreen: React.FC<Props> = ({}) => {
           />
           <Form.FormInput
             editable={!isLoading}
-            name="password"
+            name="confirm_password"
             label={t('forms.confirm_password')}
             placeholder={t('forms.input_password')}
             control={methods.control}

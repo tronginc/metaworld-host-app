@@ -102,7 +102,7 @@ const LoginScreen: React.FC<Props> = ({}) => {
   };
 
   const hanlePressForgotPassword = () => {
-    navigation.navigate(ScreenList.AUTH_FORGOT_PASSWORD);
+    navigation.navigate(ScreenList.AUTH_CONFIRM_CODE);
   };
 
   return (
@@ -118,7 +118,7 @@ const LoginScreen: React.FC<Props> = ({}) => {
             <Text fontWeight="bold" fontSize={28} color={colors.text}>
               {t('labels.log_in')}
             </Text>
-            <Text fontSize={16} color="#8D9BB9">
+            <Text textAlign="center" fontSize={16} color="#8D9BB9">
               {t('labels.welcome_back')}
             </Text>
           </Box>

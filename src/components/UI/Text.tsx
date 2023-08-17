@@ -8,6 +8,7 @@ type Props = {
   color?: TextStyle['color'];
   fontFamily?: TextStyle['fontFamily'];
   style?: TextStyle;
+  textAlign?: TextStyle['textAlign'];
   numberOfLines?: number;
 } & TextProps;
 
@@ -20,6 +21,7 @@ const Text: React.FC<PropsWithChildren<Props>> = ({
   children,
   color,
   fontFamily,
+  textAlign,
   style: overrideStyle,
   ...textProps
 }) => {
@@ -29,9 +31,10 @@ const Text: React.FC<PropsWithChildren<Props>> = ({
       fontWeight && { fontWeight },
       color && { color },
       fontFamily && { fontFamily },
+      textAlign && { textAlign },
       overrideStyle,
     ]) as TextStyle;
-  }, [color, fontFamily, fontSize, fontWeight, overrideStyle]);
+  }, [color, fontFamily, fontSize, fontWeight, overrideStyle, textAlign]);
 
   return (
     <RNText style={style} {...textProps}>

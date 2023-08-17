@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   NativeStackNavigationOptions,
@@ -16,6 +16,7 @@ import OnboardingScreen from '@features/Onboarding/screens/OnboardingScreen';
 import TabsNavigator from './TabsNavigator';
 import axios from 'axios';
 import useUserInformationQuery from '@hooks/user/useUserInformationQuery';
+import BootSplash from 'react-native-bootsplash';
 
 const RootStack = createNativeStackNavigator();
 
@@ -31,13 +32,16 @@ const flipOptions: NativeStackNavigationOptions = {
 
 const AppNavigator = () => {
   const { isFirstRun, credentials, hydrated, setUser, user } = useUserStore();
+  const [isReady, setIsReady] = useState(false);
 
-  const { data: userInfo, isLoading } = useUserInformationQuery();
+  const { data: userInfo } = useUserInformationQuery();
 
   const isLoggedIn = !!credentials;
+  const hasUserInfoInStore = !!user;
 
   useEffect(() => {
     if (userInfo) {
+      // Save user information to store
       setUser(userInfo);
     }
   }, [userInfo, setUser]);
@@ -50,11 +54,42 @@ const AppNavigator = () => {
     }
   }, [credentials]);
 
-  if (!hydrated) {
-    return null;
-  }
+  useEffect(() => {
+    // Wait for data from async storage to be hydrated
+    if (hydrated) {
+      // User has not logged in, so we need to show login screen
+      // Ready to show login screen
+      if (!isLoggedIn) {
+        setIsReady(true);
+      } else if (hasUserInfoInStore) {
+        /* User has logged in, so we need to fetch user information
+            Wait for user information to be fetched
+            If fetch user information failed,
+              credentials is invalid, so we already check in axios interceptor
+              user's credentials will be deleted in axios interceptor, so isLoggedIn = false, so we will show login screen
+         */
+        setIsReady(true);
+      }
+    }
+  }, [hydrated, hasUserInfoInStore, isLoggedIn]);
 
-  if (!isLoggedIn && !user && !isLoading) {
+  useEffect(() => {
+    // Ready to show screen, to prevent flickering, we need to delay a bit
+    const TIME_TO_DELAY = 300;
+    if (isReady) {
+      const timeout = setTimeout(() => {
+        BootSplash.hide({
+          fade: true,
+        });
+      }, TIME_TO_DELAY);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [isReady]);
+
+  if (!isReady) {
     return null;
   }
 
