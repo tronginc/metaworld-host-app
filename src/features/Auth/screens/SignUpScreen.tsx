@@ -7,7 +7,7 @@ import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
 import useLoginMutation from '@features/Auth/hooks/useLoginMutation';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
 import Image from '@components/UI/Image';
@@ -15,12 +15,14 @@ import Text from '@components/UI/Text';
 import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import PressableText from '@components/UI/PressableText';
+import ScreenList from '@constants/screenList';
 
 type Props = {};
 
 const SignUpScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('auth');
   const { colors } = useTheme();
+  const navigation = useNavigation();
   const schema = useMemo(() => {
     return yup
       .object({
@@ -43,6 +45,18 @@ const SignUpScreen: React.FC<Props> = ({}) => {
           .string()
           .min(6, t('errors.password_at_least_n_characters', { n: 6 }))
           .required(t('errors.password_is_required')),
+
+        confirm_password: yup
+          .string()
+          .min(6, t('errors.password_at_least_n_characters', { n: 6 }))
+          .required(t('errors.password_is_required'))
+          .test(
+            'passwords-match',
+            t('errors.the_password_confirmation_does_not_match'),
+            function (value) {
+              return this.parent.password === value;
+            },
+          ),
       })
       .required();
   }, [t]);
@@ -86,6 +100,13 @@ const SignUpScreen: React.FC<Props> = ({}) => {
     return mutate(payload);
   };
 
+  const handlePressLogin = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: ScreenList.AUTH_LOGIN }],
+    });
+  };
+
   return (
     <Screen enableScroll safeAreaEdge="all" backgroundColor={colors.background}>
       <Box paddingVertical={sizeScale(36)}>
@@ -97,10 +118,10 @@ const SignUpScreen: React.FC<Props> = ({}) => {
           />
           <Box alignItems="center" gap={sizeScale(8)}>
             <Text fontWeight="bold" fontSize={28} color={colors.text}>
-              {t('labels.log_in')}
+              {t('labels.create_an_account')}
             </Text>
             <Text fontSize={16} color="#8D9BB9">
-              {t('labels.welcome_back')}
+              {t('labels.please_enter_your_details')}
             </Text>
           </Box>
         </Box>
@@ -123,49 +144,46 @@ const SignUpScreen: React.FC<Props> = ({}) => {
             editable={!isLoading}
             name="password"
             label={t('forms.password')}
-            secureTextEntry
             placeholder={t('forms.input_password')}
-            autoComplete="password"
+            control={methods.control}
+            secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            autoCapitalize="none"
+          />
+          <Form.FormInput
+            editable={!isLoading}
+            name="password"
+            label={t('forms.confirm_password')}
+            placeholder={t('forms.input_password')}
             control={methods.control}
             onEndEditing={methods.handleSubmit(handleSubmit)}
+            secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            autoCapitalize="none"
+            enablesReturnKeyAutomatically
           />
-          <Box
-            marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area
-            marginVertical={-sizeScale(4)} // - Pading top and bottom for padding of PressableText to increase touchable area
-            flexDirection="row"
-            // No gap because we have padding in PressableText to increase touchable area
-            justifyContent="space-between">
-            <Box flexDirection="row" alignItems="center">
-              <Text fontWeight="400" color={colors.text}>
-                {t('forms.remember_me_for_n_days', { n: 30 })}
-              </Text>
-            </Box>
-            <PressableText
-              fontSize={14}
-              color={colors.primary}
-              padding={sizeScale(4)}
-              fontWeight="bold">
-              {t('forms.forgot_password')}
-            </PressableText>
-          </Box>
+
           <FormButton
             style={styles.loginButton}
             disabled={isLoading || !methods.formState.isValid}
             onPress={methods.handleSubmit(handleSubmit)}
             isLoading={isLoading}>
-            {t('forms.sign_in')}
+            {t('forms.sign_up')}
           </FormButton>
 
           <Box flexDirection="row" alignItems="center" justifyContent="center">
             <Text color={colors.text} fontWeight="400">
-              {t('labels.dont_have_an_account')}
+              {t('labels.already_have_an_account')}
             </Text>
             <PressableText
+              onPress={handlePressLogin}
               padding={sizeScale(4)}
               fontSize={14}
               color={colors.primary}
               fontWeight="700">
-              {t('forms.sign_up')}
+              {t('labels.log_in')}
             </PressableText>
           </Box>
         </Form>

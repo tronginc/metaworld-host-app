@@ -22,7 +22,7 @@ type Props = {};
 const LoginScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('auth');
   const { colors } = useTheme();
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
   const schema = useMemo(() => {
     return yup
       .object({
@@ -51,6 +51,12 @@ const LoginScreen: React.FC<Props> = ({}) => {
 
   const methods = useForm({
     resolver: yupResolver(schema),
+    defaultValues: __DEV__
+      ? {
+          email_or_phone: 'tronginc@yopmail.com',
+          password: '123456',
+        }
+      : undefined,
   });
 
   const { isLoading, mutate, error } = useLoginMutation();
@@ -89,11 +95,14 @@ const LoginScreen: React.FC<Props> = ({}) => {
   };
 
   const hanlePressSignUp = () => {
-    navigate(ScreenList.AUTH_SIGN_UP);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: ScreenList.AUTH_SIGN_UP }],
+    });
   };
 
   const hanlePressForgotPassword = () => {
-    navigate(ScreenList.AUTH_FORGOT_PASSWORD);
+    navigation.navigate(ScreenList.AUTH_FORGOT_PASSWORD);
   };
 
   return (
@@ -133,11 +142,14 @@ const LoginScreen: React.FC<Props> = ({}) => {
             editable={!isLoading}
             name="password"
             label={t('forms.password')}
-            secureTextEntry
             placeholder={t('forms.input_password')}
-            autoComplete="password"
             control={methods.control}
             onEndEditing={methods.handleSubmit(handleSubmit)}
+            secureTextEntry
+            autoComplete="password"
+            textContentType="newPassword"
+            autoCapitalize="none"
+            enablesReturnKeyAutomatically
           />
           <Box
             marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area

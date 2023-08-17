@@ -21,7 +21,12 @@ const RootStack = createNativeStackNavigator();
 
 const defaultOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  animation: 'slide_from_right',
+  animation: 'flip',
+};
+
+const flipOptions: NativeStackNavigationOptions = {
+  headerShown: false,
+  animation: 'flip',
 };
 
 const AppNavigator = () => {
@@ -73,12 +78,12 @@ const AppNavigator = () => {
             <RootStack.Screen
               name={ScreenList.AUTH_LOGIN}
               component={LoginScreen}
-              options={defaultOptions}
+              options={flipOptions}
             />
             <RootStack.Screen
               name={ScreenList.AUTH_SIGN_UP}
               component={SignUpScreen}
-              options={defaultOptions}
+              options={flipOptions}
             />
             <RootStack.Screen
               name={ScreenList.AUTH_CONFIRM_CODE}

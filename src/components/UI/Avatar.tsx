@@ -34,7 +34,13 @@ const Avatar: React.FC<Props> = ({ uri, size, name }) => {
     );
   }
   return (
-    <Image ImageComponent={FastImage} uri={uri} height={size} width={size} />
+    <Image
+      ImageComponent={FastImage}
+      borderRadius={size / 2}
+      uri={uri}
+      height={size}
+      width={size}
+    />
   );
 };
 

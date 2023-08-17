@@ -19,7 +19,6 @@ const useUserInformationQuery = () => {
     },
     {
       retry: false,
-      staleTime: Infinity,
       enabled: !!credentials?.accessToken,
     },
   );

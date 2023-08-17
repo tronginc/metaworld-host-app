@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { SERVICE_ACCOUNT_API_URL, SERVICE_ACCOUNT_SERVICE_NAME } from '@env';
 import useUserStore from '@stores/user.store';
 import { getRequestError } from '@utils/string';
@@ -23,8 +23,18 @@ axios.interceptors.response.use(
     console.log(JSON.stringify(response.data, null, 2));
     return response;
   },
-  error => {
+  (error: AxiosError) => {
     if (error.response) {
+      const config = error.response.config;
+      const method = config.method?.toUpperCase() || 'GET';
+      const url = config.url || '';
+      console.log(`[REQUEST] ${method} ${url} - SUCCESS`);
+      console.log('Headers:', JSON.stringify(config.headers, null, 2));
+
+      if (config.params) {
+        console.log('Params:', JSON.stringify(config.params, null, 2));
+      }
+
       console.log(error.response.data);
     }
     const isUnauthorized = error.response?.status === 401;
