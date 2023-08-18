@@ -10,24 +10,20 @@ import ScreenList from '@constants/screenList';
 import ConfirmCodeScreen from '@features/Auth/screens/ConfirmCodeScreen';
 import ForgotPasswordScreen from '@features/Auth/screens/ForgotPasswordScreen';
 import LoginScreen from '@features/Auth/screens/LoginScreen';
-import SetPasswordScreen from '@features/Auth/screens/SetPasswordScreen';
+import SetNewPasswordScreen from '@features/Auth/screens/SetNewPasswordScreen';
 import SignUpScreen from '@features/Auth/screens/SignUpScreen';
 import OnboardingScreen from '@features/Onboarding/screens/OnboardingScreen';
 import TabsNavigator from './TabsNavigator';
 import axios from 'axios';
 import useUserInformationQuery from '@hooks/user/useUserInformationQuery';
 import BootSplash from 'react-native-bootsplash';
+import { InteractionManager } from 'react-native';
 
 const RootStack = createNativeStackNavigator();
 
 const defaultOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  animation: 'flip',
-};
-
-const flipOptions: NativeStackNavigationOptions = {
-  headerShown: false,
-  animation: 'flip',
+  animation: 'slide_from_right',
 };
 
 const AppNavigator = () => {
@@ -74,18 +70,13 @@ const AppNavigator = () => {
   }, [hydrated, hasUserInfoInStore, isLoggedIn]);
 
   useEffect(() => {
-    // Ready to show screen, to prevent flickering, we need to delay a bit
-    const TIME_TO_DELAY = 300;
+    // Ready to show screen, to prevent flickering, we need to run this after interaction
     if (isReady) {
-      const timeout = setTimeout(() => {
+      InteractionManager.runAfterInteractions(() => {
         BootSplash.hide({
           fade: true,
         });
-      }, TIME_TO_DELAY);
-
-      return () => {
-        clearTimeout(timeout);
-      };
+      });
     }
   }, [isReady]);
 
@@ -95,7 +86,9 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer theme={defaultTheme}>
-      <RootStack.Navigator screenOptions={defaultOptions}>
+      <RootStack.Navigator
+        screenOptions={defaultOptions}
+        initialRouteName={ScreenList.AUTH_SET_NEW_PASSWORD}>
         {isFirstRun ? (
           <RootStack.Screen
             name={ScreenList.ONBOARDING}
@@ -113,12 +106,12 @@ const AppNavigator = () => {
             <RootStack.Screen
               name={ScreenList.AUTH_LOGIN}
               component={LoginScreen}
-              options={flipOptions}
+              options={defaultOptions}
             />
             <RootStack.Screen
               name={ScreenList.AUTH_SIGN_UP}
               component={SignUpScreen}
-              options={flipOptions}
+              options={defaultOptions}
             />
             <RootStack.Screen
               name={ScreenList.AUTH_CONFIRM_CODE}
@@ -131,8 +124,8 @@ const AppNavigator = () => {
               options={defaultOptions}
             />
             <RootStack.Screen
-              name={ScreenList.AUTH_SET_PASSWORD}
-              component={SetPasswordScreen}
+              name={ScreenList.AUTH_SET_NEW_PASSWORD}
+              component={SetNewPasswordScreen}
               options={defaultOptions}
             />
           </>

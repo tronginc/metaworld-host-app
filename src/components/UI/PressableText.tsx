@@ -9,12 +9,14 @@ import Animated, {
 
 type Props = {
   onPress?: () => void;
+  disabled?: boolean;
   style?: TextStyle;
 } & TextStyle;
 
 const PressableText: React.FC<PropsWithChildren<Props>> = ({
   children,
   onPress,
+  disabled,
   style: overrideStyle,
   ...textStyles
 }) => {
@@ -45,8 +47,14 @@ const PressableText: React.FC<PropsWithChildren<Props>> = ({
   );
 
   const style = useMemo(() => {
-    return StyleSheet.flatten([textStyles, overrideStyle]);
-  }, [textStyles, overrideStyle]);
+    return StyleSheet.flatten([
+      textStyles,
+      overrideStyle,
+      disabled && {
+        opacity: 0.5,
+      },
+    ]);
+  }, [textStyles, overrideStyle, disabled]);
 
   const textStyle = useMemo(
     () => [style, animatedStyle],
@@ -54,7 +62,11 @@ const PressableText: React.FC<PropsWithChildren<Props>> = ({
   );
 
   return (
-    <Pressable onPressIn={onPressIn} onPressOut={onPressOut} onPress={onPress}>
+    <Pressable
+      disabled={disabled}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      onPress={onPress}>
       <Animated.Text style={textStyle}>{children}</Animated.Text>
     </Pressable>
   );

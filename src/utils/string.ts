@@ -41,6 +41,9 @@ export const getRequestError = (error: unknown): string => {
   }
 
   if (error instanceof Error) {
+    if (!error.message) {
+      return i18n.t('messages:api_errors.unknown_error');
+    }
     return error.message;
   }
 

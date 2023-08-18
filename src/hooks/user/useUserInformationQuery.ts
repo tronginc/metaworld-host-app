@@ -10,7 +10,7 @@ const useUserInformationQuery = () => {
     ['user', 'information', credentials?.accessToken],
     async () => {
       return axios
-        .get<User>('/api/account/information', {
+        .get<User>('/api/mobile/account/information', {
           headers: {
             Authorization: `Bearer ${credentials?.accessToken}`,
           },

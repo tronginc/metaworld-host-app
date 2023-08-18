@@ -16,6 +16,9 @@ interface UserState {
   user?: User;
   setUser: (user: User) => void;
 
+  lastEmailSent?: number;
+  setLastEmailSent: (timestamp: number) => void;
+
   clearStore: () => void;
 }
 
@@ -30,6 +33,7 @@ const useUserStore = create<UserState>()(
       setFirstRun: isFirstRun => set(() => ({ isFirstRun })),
       setCredentials: credentials => set(() => ({ credentials })),
       setUser: user => set(() => ({ user })),
+      setLastEmailSent: lastEmailSent => set(() => ({ lastEmailSent })),
       clearStore: () =>
         set(() => ({ credentials: undefined, user: undefined })),
     }),

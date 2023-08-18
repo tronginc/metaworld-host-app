@@ -1,15 +1,31 @@
+import Box from '@components/UI/Box';
+import Image from '@components/UI/Image';
 import Text from '@components/UI/Text';
 import { sizeScale } from '@helpers/scale';
 import { useTheme } from '@react-navigation/native';
-import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { Keyboard, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import React, { useMemo, useEffect, useCallback } from 'react';
+import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form';
+import {
+  InteractionManager,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 
-interface OTPInputProps {
-  onSubmit: (otp: string) => void;
+interface OTPInputProps<T> {
+  name: Path<T>;
+  onCodeFilled?: () => void;
 }
 
-const OTPInput: React.FC<OTPInputProps> = ({ onSubmit }) => {
-  const [otp, setOTP] = useState<string>('');
+const OTPInput = <T extends FieldValues>({
+  name,
+  onCodeFilled,
+}: OTPInputProps<T>) => {
+  const { control, watch, setFocus } = useFormContext<T>();
+
+  const otp = watch(name) as string;
 
   const otpDigits = useMemo(() => {
     // split string to array
@@ -20,8 +36,6 @@ const OTPInput: React.FC<OTPInputProps> = ({ onSubmit }) => {
       .slice(0, 6)
       .concat(Array(6 - otp.length).fill(''));
   }, [otp]);
-
-  const inputRef = useRef<TextInput>(null);
 
   const { colors } = useTheme();
 
@@ -43,40 +57,82 @@ const OTPInput: React.FC<OTPInputProps> = ({ onSubmit }) => {
     ]);
   }, [colors]);
 
-  const focusInvinsibleInput = () => {
-    inputRef.current?.focus();
-  };
+  const slotErrorStyle = useMemo(() => {
+    return StyleSheet.flatten([
+      styles.slot,
+      {
+        borderColor: colors.error,
+      },
+    ]);
+  }, [colors]);
+
+  const focusInvinsibleInput = useCallback(() => {
+    setFocus(name);
+  }, [name, setFocus]);
+
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(focusInvinsibleInput);
+  }, [focusInvinsibleInput]);
 
   const currentSlotIndex = otpDigits.findIndex(digit => digit === '');
 
-  useEffect(() => {
-    if (otp.length === 6) {
-      Keyboard.dismiss();
-      onSubmit(otp);
-    }
-  }, [currentSlotIndex, onSubmit, otp]);
-
   return (
-    <View>
-      <TextInput
-        ref={inputRef}
-        style={styles.invisibleInput}
-        value={otp}
-        onChangeText={setOTP}
-        keyboardType="number-pad"
-        maxLength={6}
-        onSubmitEditing={() => onSubmit(otp)}
-      />
-      <Pressable onPress={focusInvinsibleInput} style={styles.container}>
-        {otpDigits.map((digit, index) => (
-          <Text
-            key={index}
-            style={index === currentSlotIndex ? slotFocusedStyle : slotStyle}>
-            {digit}
-          </Text>
-        ))}
-      </Pressable>
-    </View>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+        <View>
+          <TextInput
+            ref={ref}
+            style={styles.invisibleInput}
+            value={value}
+            onChangeText={text => {
+              onChange(text);
+              if (text.length === 6) {
+                Keyboard.dismiss();
+                onCodeFilled?.();
+              }
+            }}
+            keyboardType="number-pad"
+            maxLength={6}
+          />
+
+          <Pressable onPress={focusInvinsibleInput} style={styles.container}>
+            {otpDigits.map((digit, index) => (
+              <View
+                key={index}
+                style={
+                  error
+                    ? slotErrorStyle
+                    : index === currentSlotIndex
+                    ? slotFocusedStyle
+                    : slotStyle
+                }>
+                <Text style={styles.slotText}>{digit}</Text>
+              </View>
+            ))}
+          </Pressable>
+
+          {error?.message ? (
+            <Box
+              marginVertical={sizeScale(10)}
+              gap={sizeScale(4)}
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="center">
+              <Image
+                height={sizeScale(16)}
+                width={sizeScale(16)}
+                source={require('@assets/images/icons/circle-exclamation.png')}
+              />
+              <Text fontSize={14} color={colors.error}>
+                {error?.message}
+              </Text>
+            </Box>
+          ) : null}
+        </View>
+      )}
+    />
   );
 };
 
@@ -84,16 +140,17 @@ const styles = StyleSheet.create({
   slot: {
     borderWidth: 1,
     fontWeight: 'bold',
-    fontSize: sizeScale(36),
-    paddingHorizontal: sizeScale(8),
-    paddingVertical: sizeScale(12),
     flex: 1,
     maxWidth: sizeScale(60),
     borderRadius: sizeScale(8),
     alignItems: 'center',
-    textAlign: 'center',
     justifyContent: 'center',
     aspectRatio: 52 / 64,
+  },
+  slotText: {
+    fontWeight: 'bold',
+    fontSize: sizeScale(36),
+    textAlign: 'center',
   },
   invisibleInput: {
     top: -9999,

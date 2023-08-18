@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
-import useLoginMutation from '@features/Auth/hooks/useLoginMutation';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
@@ -16,6 +15,7 @@ import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import PressableText from '@components/UI/PressableText';
 import ScreenList from '@constants/screenList';
+import useRegisterMutation from '../hooks/useRegisterMutation';
 
 type Props = {};
 
@@ -63,9 +63,16 @@ const SignUpScreen: React.FC<Props> = ({}) => {
 
   const methods = useForm({
     resolver: yupResolver(schema),
+    defaultValues: __DEV__
+      ? {
+          email_or_phone: 'tronginc@gmail.com',
+          password: '123456',
+          confirm_password: '123456',
+        }
+      : undefined,
   });
 
-  const { isLoading, mutate, error } = useLoginMutation();
+  const { isLoading, mutate, error } = useRegisterMutation();
 
   useEffect(() => {
     if (error) {
@@ -91,11 +98,13 @@ const SignUpScreen: React.FC<Props> = ({}) => {
           email: data.email_or_phone,
           password: data.password,
           type: 'email',
+          referralCode: '',
         }
       : {
           phone: data.email_or_phone,
           password: data.password,
           type: 'phone',
+          referralCode: '',
         };
     return mutate(payload);
   };
@@ -166,7 +175,7 @@ const SignUpScreen: React.FC<Props> = ({}) => {
           />
 
           <FormButton
-            style={styles.loginButton}
+            style={styles.button}
             disabled={isLoading || !methods.formState.isValid}
             onPress={methods.handleSubmit(handleSubmit)}
             isLoading={isLoading}>
@@ -193,7 +202,7 @@ const SignUpScreen: React.FC<Props> = ({}) => {
 };
 
 const styles = StyleSheet.create({
-  loginButton: {
+  button: {
     marginTop: sizeScale(12),
   },
 });

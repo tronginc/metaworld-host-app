@@ -1,5 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import useUserStore from '@stores/user.store';
+import { useMutation } from '@tanstack/react-query';
+import { UserCredentinals } from 'src/types/User';
 
 type Payload = {
   verifyCode: string;
@@ -15,11 +17,18 @@ type Payload = {
 );
 
 const useVerifyRegisterMutation = () => {
-  return useMutation<Payload, Error, Payload>(['register'], async payload => {
-    return axios
-      .post('/api/account/verify-register', payload)
-      .then(response => response.data);
-  });
+  const { setCredentials } = useUserStore();
+
+  return useMutation<UserCredentinals, Error, Payload>(
+    async payload => {
+      return axios
+        .post<UserCredentinals>('/api/mobile/account/verify-register', payload)
+        .then(response => response.data);
+    },
+    {
+      onSuccess: setCredentials,
+    },
+  );
 };
 
 export default useVerifyRegisterMutation;

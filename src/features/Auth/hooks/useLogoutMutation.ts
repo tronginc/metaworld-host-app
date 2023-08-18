@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 const useLogoutMutation = () => {
   const { clearStore } = useUserStore();
 
-  return useMutation(['logout'], () => {
+  return useMutation(() => {
     return new Promise<void>(resolve => {
       clearStore();
       resolve();

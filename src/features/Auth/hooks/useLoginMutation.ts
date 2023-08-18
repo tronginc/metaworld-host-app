@@ -19,10 +19,9 @@ type Payload = {
 const useLoginMutation = () => {
   const { setCredentials } = useUserStore();
   return useMutation<UserCredentinals, Error, Payload>(
-    ['login'],
     async payload => {
       return axios
-        .post('/api/account/login', payload)
+        .post('/api/mobile/account/login', payload)
         .then(response => response.data);
     },
     {

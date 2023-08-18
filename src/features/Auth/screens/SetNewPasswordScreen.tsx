@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Screen from '@components/UI/Screen';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,13 +6,7 @@ import * as yup from 'yup';
 import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
-import useLoginMutation from '@features/Auth/hooks/useLoginMutation';
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-  useTheme,
-} from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
 import Image from '@components/UI/Image';
@@ -21,18 +15,14 @@ import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import PressableText from '@components/UI/PressableText';
 import ScreenList from '@constants/screenList';
-import { RootStackParamList } from '@navigations/index.types';
+import useRegisterMutation from '../hooks/useRegisterMutation';
 
 type Props = {};
 
-type RouteProps = RouteProp<RootStackParamList, ScreenList.AUTH_LOGIN>;
-
-const LoginScreen: React.FC<Props> = ({}) => {
+const SetNewPasswordScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('auth');
   const { colors } = useTheme();
   const navigation = useNavigation();
-  const { params } = useRoute<RouteProps>();
-
   const schema = useMemo(() => {
     return yup
       .object({
@@ -55,55 +45,49 @@ const LoginScreen: React.FC<Props> = ({}) => {
           .string()
           .min(6, t('errors.password_at_least_n_characters', { n: 6 }))
           .required(t('errors.password_is_required')),
+
+        confirm_password: yup
+          .string()
+          .min(6, t('errors.password_at_least_n_characters', { n: 6 }))
+          .required(t('errors.password_is_required'))
+          .test(
+            'passwords-match',
+            t('errors.the_password_confirmation_does_not_match'),
+            function (value) {
+              return this.parent.password === value;
+            },
+          ),
       })
       .required();
   }, [t]);
 
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: params?.email_or_phone
+    defaultValues: __DEV__
       ? {
-          email_or_phone: params.email_or_phone,
-          password: '',
-        }
-      : __DEV__
-      ? {
-          email_or_phone: 't.ronginc@gmail.com',
+          email_or_phone: 'tronginc@gmail.com',
           password: '123456',
+          confirm_password: '123456',
         }
       : undefined,
   });
 
-  const { isLoading, mutate, error } = useLoginMutation();
-
-  const handleError = useCallback(() => {
-    if (!error) {
-      return;
-    }
-
-    const message = getRequestError(error);
-    if (message === 'Account is not verified') {
-      return navigation.navigate(ScreenList.AUTH_CONFIRM_CODE, {
-        email_or_phone: methods.getValues('email_or_phone'),
-        password: methods.getValues('password'),
-        referralCode: '',
-        isLogin: true,
-      });
-    }
-    if (message.toLowerCase().includes('password')) {
-      methods.setError('password', {
-        message,
-      });
-      return;
-    }
-    methods.setError('email_or_phone', {
-      message: getRequestError(error),
-    });
-  }, [error, methods, navigation]);
+  const { isLoading, mutate, error } = useRegisterMutation();
 
   useEffect(() => {
-    handleError();
-  }, [handleError]);
+    if (error) {
+      const message = getRequestError(error);
+      if (message.toLowerCase().includes('password')) {
+        methods.setError('password', {
+          message,
+        });
+        return;
+      }
+      methods.setError('email_or_phone', {
+        message: getRequestError(error),
+      });
+    }
+  }, [error, methods]);
 
   const handleSubmit = (data: yup.InferType<typeof schema>) => {
     // Form is valid, so we just need check if email is phone or email
@@ -114,24 +98,22 @@ const LoginScreen: React.FC<Props> = ({}) => {
           email: data.email_or_phone,
           password: data.password,
           type: 'email',
+          referralCode: '',
         }
       : {
           phone: data.email_or_phone,
           password: data.password,
           type: 'phone',
+          referralCode: '',
         };
     return mutate(payload);
   };
 
-  const hanlePressSignUp = () => {
+  const handlePressLogin = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: ScreenList.AUTH_SIGN_UP }],
+      routes: [{ name: ScreenList.AUTH_LOGIN }],
     });
-  };
-
-  const hanlePressForgotPassword = () => {
-    navigation.navigate(ScreenList.AUTH_FORGOT_PASSWORD);
   };
 
   return (
@@ -145,10 +127,10 @@ const LoginScreen: React.FC<Props> = ({}) => {
           />
           <Box alignItems="center" gap={sizeScale(8)}>
             <Text fontWeight="bold" fontSize={28} color={colors.text}>
-              {t('labels.log_in')}
+              {t('labels.new_password')}
             </Text>
             <Text textAlign="center" fontSize={16} color="#8D9BB9">
-              {t('labels.welcome_back')}
+              {t('labels.please_enter_your_new_password')}
             </Text>
           </Box>
         </Box>
@@ -159,66 +141,48 @@ const LoginScreen: React.FC<Props> = ({}) => {
           methods={methods}>
           <Form.FormInput
             editable={!isLoading}
-            name="email_or_phone"
-            label={t('forms.email_phone')}
-            placeholder={t('forms.input_email_phone')}
-            autoComplete="email"
-            control={methods.control}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          <Form.FormInput
-            editable={!isLoading}
             name="password"
             label={t('forms.password')}
             placeholder={t('forms.input_password')}
             control={methods.control}
+            secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            autoCapitalize="none"
+          />
+          <Form.FormInput
+            editable={!isLoading}
+            name="confirm_password"
+            label={t('forms.confirm_password')}
+            placeholder={t('forms.input_password')}
+            control={methods.control}
             onEndEditing={methods.handleSubmit(handleSubmit)}
             secureTextEntry
-            autoComplete="password"
+            autoComplete="new-password"
             textContentType="newPassword"
             autoCapitalize="none"
             enablesReturnKeyAutomatically
           />
-          <Box
-            marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area
-            marginVertical={-sizeScale(4)} // - Pading top and bottom for padding of PressableText to increase touchable area
-            flexDirection="row"
-            // No gap because we have padding in PressableText to increase touchable area
-            justifyContent="space-between">
-            <Box flexDirection="row" alignItems="center">
-              <Text fontWeight="400" color={colors.text}>
-                {t('forms.remember_me_for_n_days', { n: 30 })}
-              </Text>
-            </Box>
-            <PressableText
-              onPress={hanlePressForgotPassword}
-              fontSize={14}
-              color={colors.primary}
-              padding={sizeScale(4)}
-              fontWeight="bold">
-              {t('forms.forgot_password')}
-            </PressableText>
-          </Box>
+
           <FormButton
-            style={styles.loginButton}
+            style={styles.button}
             disabled={isLoading || !methods.formState.isValid}
             onPress={methods.handleSubmit(handleSubmit)}
             isLoading={isLoading}>
-            {t('forms.sign_in')}
+            {t('forms.submit')}
           </FormButton>
 
           <Box flexDirection="row" alignItems="center" justifyContent="center">
             <Text color={colors.text} fontWeight="400">
-              {t('labels.dont_have_an_account')}
+              {t('labels.already_have_an_account')}
             </Text>
             <PressableText
-              onPress={hanlePressSignUp}
+              onPress={handlePressLogin}
               padding={sizeScale(4)}
               fontSize={14}
               color={colors.primary}
               fontWeight="700">
-              {t('forms.sign_up')}
+              {t('labels.log_in')}
             </PressableText>
           </Box>
         </Form>
@@ -228,9 +192,9 @@ const LoginScreen: React.FC<Props> = ({}) => {
 };
 
 const styles = StyleSheet.create({
-  loginButton: {
+  button: {
     marginTop: sizeScale(12),
   },
 });
 
-export default LoginScreen;
+export default SetNewPasswordScreen;
