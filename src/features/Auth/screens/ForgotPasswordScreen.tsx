@@ -1,26 +1,18 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import Screen from '@components/UI/Screen';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Form from '@components/Form';
 import FormButton from '@components/Form/FormButton';
 import { useTranslation } from 'react-i18next';
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-  useTheme,
-} from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
-import Box from '@components/UI/Box';
-import Image from '@components/UI/Image';
-import Text from '@components/UI/Text';
 import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import ScreenList from '@constants/screenList';
 import { RootStackParamList } from '@navigations/index.types';
 import useSendCodeResetPasswordMutation from '../hooks/useSendCodeResetPasswordMutation';
+import AuthLayout from '../components/AuthLayout';
 
 type Props = {};
 
@@ -28,7 +20,6 @@ type RouteProps = RouteProp<RootStackParamList, ScreenList.AUTH_LOGIN>;
 
 const ForgotPasswordScreen: React.FC<Props> = ({}) => {
   const [t] = useTranslation('auth');
-  const { colors } = useTheme();
   const navigation = useNavigation();
   const { params } = useRoute<RouteProps>();
 
@@ -109,56 +100,39 @@ const ForgotPasswordScreen: React.FC<Props> = ({}) => {
   };
 
   return (
-    <Screen enableScroll safeAreaEdge="all" backgroundColor={colors.background}>
-      <Box paddingVertical={sizeScale(36)}>
-        <Box alignItems="center" gap={sizeScale(24)}>
-          <Image
-            source={require('@assets/images/logo.png')}
-            height={48}
-            width={48}
-          />
-          <Box alignItems="center" gap={sizeScale(8)}>
-            <Text fontWeight="bold" fontSize={28} color={colors.text}>
-              {t('labels.forgot_password')}
-            </Text>
-            <Box paddingHorizontal={sizeScale(21)}>
-              <Text textAlign="center" fontSize={16} color="#8D9BB9">
-                {t('labels.please_enter_your_email')}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-        <Form
-          paddingHorizontal={sizeScale(20)}
-          paddingVertical={sizeScale(32)}
-          gap={sizeScale(20)}
-          methods={methods}>
-          <Form.FormInput
-            editable={!isLoading}
-            name="email_or_phone"
-            label={t('forms.email_phone')}
-            placeholder={t('forms.input_email_phone')}
-            autoComplete="email"
-            control={methods.control}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
+    <AuthLayout
+      title={t('labels.forgot_password')}
+      subtitle={t('labels.please_enter_your_email')}>
+      <Form
+        paddingHorizontal={sizeScale(20)}
+        paddingVertical={sizeScale(32)}
+        gap={sizeScale(20)}
+        methods={methods}>
+        <Form.FormInput
+          editable={!isLoading}
+          name="email_or_phone"
+          label={t('forms.email_phone')}
+          placeholder={t('forms.input_email_phone')}
+          autoComplete="email"
+          control={methods.control}
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
 
-          <FormButton
-            style={styles.loginButton}
-            disabled={isLoading || !methods.formState.isValid}
-            onPress={methods.handleSubmit(handleSubmit)}
-            isLoading={isLoading}>
-            {t('forms.submit')}
-          </FormButton>
-        </Form>
-      </Box>
-    </Screen>
+        <FormButton
+          style={styles.button}
+          disabled={isLoading || !methods.formState.isValid}
+          onPress={methods.handleSubmit(handleSubmit)}
+          isLoading={isLoading}>
+          {t('forms.submit')}
+        </FormButton>
+      </Form>
+    </AuthLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  loginButton: {
+  button: {
     marginTop: sizeScale(12),
   },
 });

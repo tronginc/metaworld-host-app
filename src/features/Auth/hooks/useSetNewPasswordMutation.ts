@@ -4,7 +4,10 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { UserCredentinals } from 'src/types/User';
 
-type Payload = {} & (
+type Payload = {
+  otpCode: string;
+  newPassword: string;
+} & (
   | {
       email: string;
       type: 'email';
@@ -15,26 +18,20 @@ type Payload = {} & (
     }
 );
 
-const useCheckOTPMutation = () => {
+const useSetNewPasswordMutation = () => {
   const navigation = useNavigation();
   return useMutation<UserCredentinals, Error, Payload>(
     async payload => {
       return axios
-        .post('/api/mobile/account/forgot-password', payload)
+        .post('/api/mobile/account/change-password', payload)
         .then(response => response.data);
     },
     {
-      onSuccess: (_, variables) => {
-        navigation.navigate(ScreenList.AUTH_CONFIRM_CODE, {
-          email_or_phone:
-            'email' in variables ? variables.email : variables.phone,
-          referralCode: '',
-          password: '',
-          isForgotPassword: true,
-        });
+      onSuccess: data => {
+        console.log('useSetNewPasswordMutation', data);
       },
     },
   );
 };
 
-export default useCheckOTPMutation;
+export default useSetNewPasswordMutation;

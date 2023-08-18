@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import Screen from '@components/UI/Screen';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,13 +14,14 @@ import {
 } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
-import Image from '@components/UI/Image';
 import Text from '@components/UI/Text';
 import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
 import PressableText from '@components/UI/PressableText';
 import ScreenList from '@constants/screenList';
 import { RootStackParamList } from '@navigations/index.types';
+import AuthLayout from '../components/AuthLayout';
+import Checkbox from '@components/Form/Checkbox';
 
 type Props = {};
 
@@ -135,95 +135,80 @@ const LoginScreen: React.FC<Props> = ({}) => {
   };
 
   return (
-    <Screen enableScroll safeAreaEdge="all" backgroundColor={colors.background}>
-      <Box paddingVertical={sizeScale(36)}>
-        <Box alignItems="center" gap={sizeScale(24)}>
-          <Image
-            source={require('@assets/images/logo.png')}
-            height={48}
-            width={48}
-          />
-          <Box alignItems="center" gap={sizeScale(8)}>
-            <Text fontWeight="bold" fontSize={28} color={colors.text}>
-              {t('labels.log_in')}
-            </Text>
-            <Text textAlign="center" fontSize={16} color="#8D9BB9">
-              {t('labels.welcome_back')}
-            </Text>
-          </Box>
-        </Box>
-        <Form
-          paddingHorizontal={sizeScale(20)}
-          paddingVertical={sizeScale(32)}
-          gap={sizeScale(20)}
-          methods={methods}>
-          <Form.FormInput
-            editable={!isLoading}
-            name="email_or_phone"
-            label={t('forms.email_phone')}
-            placeholder={t('forms.input_email_phone')}
-            autoComplete="email"
-            control={methods.control}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          <Form.FormInput
-            editable={!isLoading}
-            name="password"
-            label={t('forms.password')}
-            placeholder={t('forms.input_password')}
-            control={methods.control}
-            onEndEditing={methods.handleSubmit(handleSubmit)}
-            secureTextEntry
-            autoComplete="password"
-            textContentType="newPassword"
-            autoCapitalize="none"
-            enablesReturnKeyAutomatically
-          />
-          <Box
-            marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area
-            marginVertical={-sizeScale(4)} // - Pading top and bottom for padding of PressableText to increase touchable area
-            flexDirection="row"
-            // No gap because we have padding in PressableText to increase touchable area
-            justifyContent="space-between">
-            <Box flexDirection="row" alignItems="center">
+    <AuthLayout title={t('labels.log_in')} subtitle={t('labels.welcome_back')}>
+      <Form
+        paddingHorizontal={sizeScale(20)}
+        paddingVertical={sizeScale(32)}
+        gap={sizeScale(20)}
+        methods={methods}>
+        <Form.FormInput
+          editable={!isLoading}
+          name="email_or_phone"
+          label={t('forms.email_phone')}
+          placeholder={t('forms.input_email_phone')}
+          autoComplete="email"
+          control={methods.control}
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
+        <Form.FormInput
+          editable={!isLoading}
+          name="password"
+          label={t('forms.password')}
+          placeholder={t('forms.input_password')}
+          control={methods.control}
+          secureTextEntry
+          autoComplete="password"
+          textContentType="newPassword"
+          autoCapitalize="none"
+          enablesReturnKeyAutomatically
+        />
+        <Box
+          marginRight={-sizeScale(4)} // - Pading right for padding of PressableText to increase touchable area
+          marginVertical={-sizeScale(4)} // - Pading top and bottom for padding of PressableText to increase touchable area
+          flexDirection="row"
+          alignItems="center"
+          // No gap because we have padding in PressableText to increase touchable area
+          justifyContent="space-between">
+          <Box flexDirection="row" alignItems="center">
+            <Checkbox checked onChange={console.log}>
               <Text fontWeight="400" color={colors.text}>
                 {t('forms.remember_me_for_n_days', { n: 30 })}
               </Text>
-            </Box>
-            <PressableText
-              onPress={hanlePressForgotPassword}
-              fontSize={14}
-              color={colors.primary}
-              padding={sizeScale(4)}
-              fontWeight="bold">
-              {t('forms.forgot_password')}
-            </PressableText>
+            </Checkbox>
           </Box>
-          <FormButton
-            style={styles.loginButton}
-            disabled={isLoading || !methods.formState.isValid}
-            onPress={methods.handleSubmit(handleSubmit)}
-            isLoading={isLoading}>
-            {t('forms.sign_in')}
-          </FormButton>
+          <PressableText
+            onPress={hanlePressForgotPassword}
+            fontSize={14}
+            color={colors.primary}
+            padding={sizeScale(4)}
+            fontWeight="bold">
+            {t('forms.forgot_password')}
+          </PressableText>
+        </Box>
+        <FormButton
+          style={styles.loginButton}
+          disabled={isLoading || !methods.formState.isValid}
+          onPress={methods.handleSubmit(handleSubmit)}
+          isLoading={isLoading}>
+          {t('forms.sign_in')}
+        </FormButton>
 
-          <Box flexDirection="row" alignItems="center" justifyContent="center">
-            <Text color={colors.text} fontWeight="400">
-              {t('labels.dont_have_an_account')}
-            </Text>
-            <PressableText
-              onPress={hanlePressSignUp}
-              padding={sizeScale(4)}
-              fontSize={14}
-              color={colors.primary}
-              fontWeight="700">
-              {t('forms.sign_up')}
-            </PressableText>
-          </Box>
-        </Form>
-      </Box>
-    </Screen>
+        <Box flexDirection="row" alignItems="center" justifyContent="center">
+          <Text color={colors.text} fontWeight="400">
+            {t('labels.dont_have_an_account')}
+          </Text>
+          <PressableText
+            onPress={hanlePressSignUp}
+            padding={sizeScale(4)}
+            fontSize={14}
+            color={colors.primary}
+            fontWeight="700">
+            {t('forms.sign_up')}
+          </PressableText>
+        </Box>
+      </Form>
+    </AuthLayout>
   );
 };
 

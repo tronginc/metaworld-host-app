@@ -88,7 +88,9 @@ const AppNavigator = () => {
     <NavigationContainer theme={defaultTheme}>
       <RootStack.Navigator
         screenOptions={defaultOptions}
-        initialRouteName={ScreenList.AUTH_SET_NEW_PASSWORD}>
+        // initialRouteName={ScreenList.AUTH_SET_NEW_PASSWORD}
+        //
+      >
         {isFirstRun ? (
           <RootStack.Screen
             name={ScreenList.ONBOARDING}

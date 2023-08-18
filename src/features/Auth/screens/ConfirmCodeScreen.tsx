@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import Screen from '@components/UI/Screen';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -14,7 +13,6 @@ import {
 } from '@react-navigation/native';
 import { sizeScale } from '@helpers/scale';
 import Box from '@components/UI/Box';
-import Image from '@components/UI/Image';
 import Text from '@components/UI/Text';
 import { getRequestError, isEmailValid, isPhoneValid } from '@utils/string';
 import { StyleSheet } from 'react-native';
@@ -23,6 +21,7 @@ import { RootStackParamList } from '@navigations/index.types';
 import ScreenList from '@constants/screenList';
 import useVerifyRegisterMutation from '../hooks/useVerifyRegisterMutation';
 import ResendCode from '../components/ResendCode';
+import AuthLayout from '../components/AuthLayout';
 
 type Props = {};
 
@@ -73,6 +72,7 @@ const ConfirmCodeScreen: React.FC<Props> = ({}) => {
   }, [error, methods]);
 
   const handleSubmit = (data: yup.InferType<typeof schema>) => {
+    // This code is for forgot password
     if (params.isForgotPassword) {
       return navigation.navigate(ScreenList.AUTH_SET_NEW_PASSWORD, {
         email_or_phone: params.email_or_phone,
@@ -99,59 +99,41 @@ const ConfirmCodeScreen: React.FC<Props> = ({}) => {
   };
 
   return (
-    <Screen enableScroll safeAreaEdge="all" backgroundColor={colors.background}>
-      <Box paddingVertical={sizeScale(36)}>
-        <Box alignItems="center" gap={sizeScale(24)}>
-          <Image
-            source={require('@assets/images/logo.png')}
-            height={48}
-            width={48}
-          />
-          <Box alignItems="center" gap={sizeScale(8)}>
-            <Text fontWeight="bold" fontSize={28} color={colors.text}>
-              {t('labels.confirmation_code')}
-            </Text>
-            <Text textAlign="center" fontSize={16} color="#8D9BB9">
-              {t('labels.confirmation_code_sent_description', {
-                email: '',
-              })}
-              <Text fontSize={16} fontWeight="bold">
-                {params.email_or_phone}
-              </Text>
-            </Text>
-          </Box>
+    <AuthLayout
+      title={t('labels.confirmation_code')}
+      subtitle={t('labels.confirmation_code_sent_description', {
+        email: params.email_or_phone,
+      })}>
+      <Form
+        paddingHorizontal={sizeScale(20)}
+        paddingVertical={sizeScale(32)}
+        gap={sizeScale(20)}
+        methods={methods}>
+        <OTPInput<yup.InferType<typeof schema>>
+          name="verifyCode"
+          onCodeFilled={methods.handleSubmit(handleSubmit)}
+        />
+
+        <Box
+          flexDirection="row"
+          marginTop={-sizeScale(8)}
+          alignItems="center"
+          justifyContent="center">
+          <Text color={colors.text} fontWeight="400">
+            {t('labels.dont_get_a_code')}
+          </Text>
+          <ResendCode />
         </Box>
-        <Form
-          paddingHorizontal={sizeScale(20)}
-          paddingVertical={sizeScale(32)}
-          gap={sizeScale(20)}
-          methods={methods}>
-          <OTPInput<yup.InferType<typeof schema>>
-            name="verifyCode"
-            onCodeFilled={methods.handleSubmit(handleSubmit)}
-          />
 
-          <Box
-            flexDirection="row"
-            marginTop={-sizeScale(8)}
-            alignItems="center"
-            justifyContent="center">
-            <Text color={colors.text} fontWeight="400">
-              {t('labels.dont_get_a_code')}
-            </Text>
-            <ResendCode />
-          </Box>
-
-          <FormButton
-            style={styles.loginButton}
-            disabled={isLoading || !methods.formState.isValid}
-            onPress={methods.handleSubmit(handleSubmit)}
-            isLoading={isLoading}>
-            {t('forms.continue')}
-          </FormButton>
-        </Form>
-      </Box>
-    </Screen>
+        <FormButton
+          style={styles.loginButton}
+          disabled={isLoading || !methods.formState.isValid}
+          onPress={methods.handleSubmit(handleSubmit)}
+          isLoading={isLoading}>
+          {t('forms.continue')}
+        </FormButton>
+      </Form>
+    </AuthLayout>
   );
 };
 

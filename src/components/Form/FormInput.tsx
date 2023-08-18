@@ -8,6 +8,10 @@ import React, { useMemo, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Platform, StyleSheet, TextInputProps } from 'react-native';
 
+import eye from '@assets/images/icons/eye.png';
+import eye_slash from '@assets/images/icons/eye-slash.png';
+import Pressable from '@components/UI/Pressable';
+
 type Props<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
@@ -29,6 +33,8 @@ const FormInput = <T extends FieldValues>({
 
   const { colors } = useTheme();
   const [isFocus, setIsFocus] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
+  const toggleShowPassword = () => setShowPassword(!showPassword);
 
   const handleFocus = () => {
     setIsFocus(true);
@@ -51,24 +57,52 @@ const FormInput = <T extends FieldValues>({
             {label}
           </Text>
           <Box gap={sizeScale(4)}>
-            <TextInput
-              onFocus={handleFocus}
-              underlineColorAndroid="transparent"
-              placeholderTextColor={colors.neutral_05}
-              backgroundColor={colors.card}
-              borderColor={
-                isFocus ? colors.neutral_05 : error ? 'red' : colors.neutral_03
-              }
-              onBlur={() => {
-                onBlur();
-                handleBlur();
-              }}
-              onChangeText={onChange}
-              value={value}
-              fontSize={16}
-              style={error ? styleInputInValid : styles.input}
-              {...props}
-            />
+            <Box position="relative">
+              <TextInput
+                onFocus={handleFocus}
+                underlineColorAndroid="transparent"
+                placeholderTextColor={colors.neutral_05}
+                backgroundColor={colors.card}
+                borderColor={
+                  isFocus
+                    ? colors.neutral_05
+                    : error
+                    ? 'red'
+                    : colors.neutral_03
+                }
+                onBlur={() => {
+                  onBlur();
+                  handleBlur();
+                }}
+                onChangeText={onChange}
+                value={value}
+                fontSize={16}
+                style={error ? styleInputInValid : styles.input}
+                {...props}
+                secureTextEntry={
+                  'secureTextEntry' in props ? showPassword : false
+                }
+              />
+              {'secureTextEntry' in props ? (
+                <Pressable
+                  position="absolute"
+                  top={0}
+                  right={0}
+                  bottom={0}
+                  scaleTo={1.3}
+                  paddingHorizontal={sizeScale(16)}
+                  paddingVertical={sizeScale(14)}
+                  alignItems="center"
+                  onPress={toggleShowPassword}
+                  justifyContent="center">
+                  <Image
+                    source={showPassword ? eye_slash : eye}
+                    height={20}
+                    width={20}
+                  />
+                </Pressable>
+              ) : null}
+            </Box>
             {error?.message ? (
               <Box gap={sizeScale(4)} flexDirection="row" alignItems="center">
                 <Image
